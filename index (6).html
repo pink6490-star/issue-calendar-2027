@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2027 주요 이슈 캘린더</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.min.css">
+<script>
+/* =========================================================================
+   DATA  —  2027 업종별 주요 이슈 및 행사 List (원본: '최종정리' 시트 · 기준 2026.10.06)
+   · scope: "기업" = '행사 제외 ver.' 시트에도 있는 행 / "행사" = 최종정리 시트에만 있는 행사·주관사 행
+   -------------------------------------------------------------------------
+   · 1 event = 1 이슈. 같은 기업의 여러 이슈는 각각 별도 event.
+   · periodType
+       "date"    : 일자 확정            (month, day)
+       "month"   : 월 확정              (month)
+       "range"   : 기간                 (month[,day] ~ endMonth[,endDay]); carryOver=true → 2026년 개막, 2027년 1월 기준 집계
+       "quarter" : 분기만 확정          (quarter)
+       "half"    : 상/하반기만 확정     (half: "H1" | "H2")
+       "season"  : 특정 시즌            (season: 봄/여름/연말, half 가능 시)
+       "year"    : 2027년 중 (월 미정)
+       "tbd"     : 일정 미정 / 2027년 이후
+       "recurring": 정례 행사, 2027 일정 미발표 (recurLabel)
+       "pre"     : 2027년 이전(2026) 선행 이슈
+     ※ 불명확한 일정은 임의의 월로 배정하지 않습니다.
+   · 새 데이터 추가: 아래 배열에 객체를 추가하면 KPI·차트·타임라인이 자동 계산됩니다.
+   ========================================================================= */
+const events = [
+  {"id": 1, "company": "케이뱅크", "industry": "금융", "industryRaw": "금융", "title": "영업 개시 10주년", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.04.03", "periodType": "date", "month": 4, "day": 3, "quarter": "Q2", "half": "H1", "description": "• 5주년 당시 특판예금 등 고객 혜택 중심의 주년 마케팅 진행", "anniversary": "영업 개시 10주년", "founded": "2017.04.03", "pastCampaign": "5주년 특판예금 등 고객 혜택 마케팅(2022)", "opportunity": "10주년 혜택 캠페인 고지 — 광화문 직장인 접점", "sourceNote": "영업 개시 10주년 (2017.04.03)", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 2, "company": "삼성생명", "industry": "금융", "industryRaw": "금융", "title": "창립 70주년", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.05.05", "periodType": "date", "month": 5, "day": 5, "quarter": "Q2", "half": "H1", "description": "• 1957년 동방생명보험으로 출범\n• 2017년 창립 60주년 '3대 자산 바로 알기' 캠페인 전개\n• 70년 금융 헤리티지와 미래 금융을 연결한 브랜딩 제안 가능", "anniversary": "70주년", "founded": "1957.05.05", "agency": "제일기획", "agencyTypes": ["전면대행"], "pastCampaign": "60주년 '3대 자산 바로 알기' 캠페인(2017)", "opportunity": "70주년 기념 캠페인 — 가정의 달(5월)과 겹치는 시점 집중 노출", "sourceNote": "창립 70주년 (1957.05.05)", "sources": [{"label": "출처 기사", "url": "https://www.newswire.co.kr/newsRead.php?no=247302"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 3, "company": "카카오뱅크", "industry": "금융", "industryRaw": "금융", "title": "영업 개시 10주년", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.07.27", "periodType": "date", "month": 7, "day": 27, "quarter": "Q3", "half": "H2", "description": "• 5주년 당시 '모두의 서프라이즈' 행사 진행", "anniversary": "영업 개시 10주년", "founded": "2017.07.27", "agency": "오리콤", "pastCampaign": "5주년 '모두의 서프라이즈' 이벤트(2022)", "opportunity": "10주년 고객 감사 캠페인 — 대형 비주얼로 브랜드 각인", "sourceNote": "영업 개시 10주년 (2017.07.27)", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 4, "company": "미래에셋그룹", "industry": "금융", "industryRaw": "금융", "title": "창립 30주년", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.07.01", "periodType": "date", "month": 7, "day": 1, "quarter": "Q3", "half": "H2", "description": "• 20주년 기념행사를 광화문 포시즌스 호텔에서 개최", "anniversary": "30주년", "founded": "1997.07.01", "agency": "라송", "pastCampaign": "20주년 기념행사를 광화문 포시즌스 호텔에서 개최(2017)", "opportunity": "20주년 행사 개최지(광화문) 연계 — 30주년 기념 주간 랜드마크 노출", "sourceNote": "창립 30주년 (1997.07.01)", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 5, "company": "iM뱅크", "industry": "금융", "industryRaw": "금융", "title": "창립 60주년", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.10.07", "periodType": "date", "month": 10, "day": 7, "quarter": "Q4", "half": "H2", "description": "• 전신 대구은행 1967년 10월 7일 개점, 국내 최초 지방은행\n• 2025년 말 신임 은행장이 '1967년 창립돼 곧 60년의 역사를 만들 iM뱅크'로 공식 언급\n• 2026년 59주년을 앞두고 초대 행장 흉상 이전 등 역사 자산 재조명", "anniversary": "60주년", "founded": "1967.10.07", "pastCampaign": "59주년 앞두고 초대 행장 흉상 이전 등 역사 자산 재조명(2026)", "opportunity": "60년 헤리티지 + 시중은행 전환 후 전국 브랜드 캠페인", "sourceNote": "창립 60주년 (1967.10.07 대구은행 개점)", "sources": [{"label": "출처 기사", "url": "https://v.daum.net/v/YahlNwqyrl"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 6, "company": "우리금융그룹", "industry": "금융", "industryRaw": "금융", "title": "동양·ABL생명 통합 생보사 출범", "issueType": "기업 주요 변화", "scope": "기업", "periodRaw": "2027년 하반기", "periodType": "half", "half": "H2", "agency": "그로스스텔라바이브", "opportunity": "통합 보험사 출범 시 신규 브랜드 인지도 캠페인", "sourceNote": "우리금융 — 동양·ABL생명 통합 생보사 출범", "sources": [{"label": "출처 기사", "url": "https://www.ajunews.com/view/20260818102849738"}], "sheets": ["최종정리"]},
+  {"id": 7, "company": "현대모비스", "industry": "모빌리티", "industryRaw": "자동차·모빌리티", "title": "창립 50주년", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.06.25", "periodType": "date", "month": 6, "day": 25, "quarter": "Q2", "half": "H1", "description": "• 창립 40주년 당시 e-역사관 개편·공개", "anniversary": "50주년", "founded": "1977.06.25", "agency": "이노션", "agencyTypes": ["전면대행"], "pastCampaign": "40주년 e-역사관 개편 공개(2017)", "opportunity": "50주년 기업 PR — 기술 기업 이미지 대형 비주얼", "sourceNote": "창립 50주년 (1977.06.25)", "sources": [{"label": "출처 기사", "url": "https://job.gg.go.kr/empmn/desEntDtl.do?bizrno=1018116406"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 8, "company": "현대자동차", "industry": "모빌리티", "industryRaw": "자동차·모빌리티", "title": "창립 60주년", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.12.29", "periodType": "date", "month": 12, "day": 29, "quarter": "Q4", "half": "H2", "description": "• 50주년 창립기념일은 휴무일로 지정, 별도 행사 미진행 (경영 현안 및 노사 이슈)\n• 60년 헤리티지와 미래 모빌리티를 연결한 홍보 방안 가능", "anniversary": "60주년", "founded": "1967.12.29", "agency": "이노션", "agencyTypes": ["전면대행"], "pastCampaign": "없음 — 50주년은 별도 행사 없음", "opportunity": "60년 헤리티지 + 미래 모빌리티 메시지 (연말)", "sourceNote": "창립 60주년 (1967.12.29)", "sources": [{"label": "출처 기사", "url": "https://kind.krx.co.kr/external/2026/05/15/000673/20260515001414/11013.htm"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 9, "company": "메르세데스벤츠코리아", "industry": "모빌리티", "industryRaw": "자동차·모빌리티", "title": "자율주행차 국내 출시", "issueType": "신제품 / 서비스 출시", "scope": "기업", "periodRaw": "2027년 중", "periodType": "year", "agency": "HS AD", "agencyTypes": ["전면대행"], "opportunity": "기술 런칭 — 대형 3D 영상 소재", "sourceNote": "엔비디아 '알파마요' 탑재 자율주행차 국내 출시", "sources": [{"label": "출처 기사", "url": "https://www.hankyung.com/article/202604203221i"}], "sheets": ["최종정리"]},
+  {"id": 10, "company": "JLR코리아", "industry": "모빌리티", "industryRaw": "자동차·모빌리티", "title": "레인지로버 첫 순수 전기차 '레인지로버 일렉트릭' 국내 출시", "issueType": "신제품 / 서비스 출시", "scope": "기업", "periodRaw": "2027년 중순", "periodType": "year", "description": "• 레인지로버 첫 순수 전기차, 2026.09 국내 공개·주문 시작\n• 550마력, 1회 충전 최대 600km", "organizer": "JLR코리아", "agency": "WPP-올이즈웰", "opportunity": "럭셔리 EV 런칭 — 프리미엄 랜드마크 노출", "linkPoint": "• 출시 시점 럭셔리 EV 런칭 캠페인 (티저 → 공개 2단계 운영)\n• 차량이 곡면 모서리를 돌아 화면 밖으로 주행하는 3D 아나모픽 연출", "sources": [{"label": "출처 기사", "url": "https://www.fnnews.com/news/202609020600444240"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 11, "company": "한국자동차모빌리티산업협회(KAMA)", "industry": "모빌리티", "industryRaw": "자동차·모빌리티", "title": "2027 서울모빌리티쇼", "issueType": "대형 행사 / 이벤트", "scope": "행사", "periodRaw": "2027.04.01~04.11", "periodType": "range", "month": 4, "day": 1, "endMonth": 4, "endDay": 11, "quarter": "Q2", "half": "H1", "sourceNote": "2027 서울모빌리티쇼 (킨텍스)", "sources": [{"label": "출처 기사", "url": "https://www.mobilityshow.or.kr/ko/main"}], "sheets": ["최종정리"]},
+  {"id": 12, "company": "LG그룹", "industry": "IT", "industryRaw": "IT·전자·통신", "title": "창립 80주년", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.01.05", "periodType": "date", "month": 1, "day": 5, "quarter": "Q1", "half": "H1", "description": "• 2017년 창립 70주년 '사랑해요 LG' 감사 대축제 개최\n• 매년 4월 둘째 주 금요일을 전 계열사 공동 휴무일로 지정", "anniversary": "80주년", "founded": "1947.01.05", "agency": "HS AD", "agencyTypes": ["전면대행"], "pastCampaign": "70주년 '사랑해요 LG' 감사 대축제(2017)", "opportunity": "80주년 감사 캠페인 — 연초 집중 노출", "sourceNote": "창립 80주년 (1947.01.05)", "sources": [{"label": "출처 기사", "url": "https://www.lg.co.kr/images/download/LG%20ESG%20Reporting%202021-2022_KR.pdf"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 13, "company": "애플코리아", "industry": "IT", "industryRaw": "IT·전자·통신", "title": "차세대 슬림 스마트폰 '아이폰 에어2' 출시 전망", "issueType": "신제품 / 서비스 출시", "scope": "기업", "periodRaw": "2027년 봄 (전망)", "periodType": "season", "half": "H1", "season": "봄", "agency": "TBWA", "opportunity": "신제품 출시 주간 런칭 광고", "sources": [{"label": "출처 기사", "url": "https://www.dt.co.kr/article/12068338"}], "sheets": ["최종정리"]},
+  {"id": 14, "company": "애플코리아", "industry": "IT", "industryRaw": "IT·전자·통신", "title": "AI 글래스 공개 전망", "issueType": "신제품 / 서비스 출시", "scope": "기업", "periodRaw": "2027년 말 (전망)", "periodType": "season", "half": "H2", "season": "연말", "agency": "TBWA", "opportunity": "신제품 공개 시점 런칭 광고", "sources": [{"label": "AI 글래스 공개 (전망)", "url": "https://www.mk.co.kr/news/business/12108164"}], "sheets": ["최종정리"]},
+  {"id": 15, "company": "구글코리아", "industry": "IT", "industryRaw": "IT·전자·통신", "title": "구찌 협업 AI 안경 출시", "issueType": "신제품 / 서비스 출시", "scope": "기업", "periodRaw": "2027년 중", "periodType": "year", "agency": "WPP-BJ파트너스", "agencyTypes": ["전면대행"], "opportunity": "구찌와 공동 런칭 캠페인", "sources": [{"label": "출처 기사", "url": "https://www.etnews.com/20260417000113"}], "sheets": ["최종정리"]},
+  {"id": 16, "company": "OpenAI", "industry": "IT", "industryRaw": "IT·전자·통신", "title": "ChatGPT 기반 AI 스피커 출시 전망", "issueType": "신제품 / 서비스 출시", "scope": "기업", "periodRaw": "2027년 중 (전망)", "periodType": "year", "agency": "Phd코리아", "opportunity": "출시 확정 시 국내 런칭 광고", "sources": [{"label": "출처 기사", "url": "https://www.chosun.com/economy/tech_it/2026/08/08/2N4WMWBG2FAO3MJVNVUFPBDVJM/"}], "sheets": ["최종정리"]},
+  {"id": 17, "company": "카카오", "industry": "IT", "industryRaw": "IT·전자·통신", "title": "서울아레나 개장", "issueType": "대형 행사 / 이벤트", "scope": "행사", "periodRaw": "2027년 상반기 (3.30 완공)", "periodType": "half", "half": "H1", "description": "• 27년 3월 30일 완공. 개장일 미정.", "organizer": "카카오 (설계, 시공, 운영, 유지보수 총괄)", "location": "도봉구 창동", "opportunity": "개장 캠페인 · 공연 라이브 연계 송출", "linkPoint": "• K-POP 팬덤 광고에 강한 LUUX를 활용해 개장 기대감을 높이는 티징 캠페인 제안\n• 개관·첫 공연·월드투어 시점에 엔터테인먼트·뷰티·패션 등 K-Culture 업종 대상 광고 영업", "sourceNote": "서울아레나(창동) 개장 — 카카오 운영 음악 특화 아레나", "sources": [{"label": "출처 기사", "url": "https://seoularena.net/"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 18, "company": "EMK컴퍼니", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "뮤지컬 '모차르트!'", "issueType": "스포츠 / 문화", "scope": "기업", "periodRaw": "2027.01.16 ~ 2027.03.14", "periodType": "range", "month": 1, "day": 16, "endMonth": 3, "endDay": 14, "quarter": "Q1", "half": "H1", "content": "모차르트!", "producer": "EMK뮤지컬컴퍼니", "location": "예술의전당 오페라극장", "agency": "꿈의공장", "opportunity": "연간 공연 3편 시즌 패키지", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 19, "company": "EMK컴퍼니", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "뮤지컬 '몬테크리스토'", "issueType": "스포츠 / 문화", "scope": "기업", "periodRaw": "2027.07.23 ~ 10.24", "periodType": "range", "month": 7, "day": 23, "endMonth": 10, "endDay": 24, "quarter": "Q3", "half": "H2", "content": "몬테크리스토", "producer": "EMK뮤지컬컴퍼니", "location": "충무아트센터 대극장", "agency": "꿈의공장", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 20, "company": "신시컴퍼니", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "뮤지컬 '아이다'", "issueType": "스포츠 / 문화", "scope": "기업", "periodRaw": "2027.10 ~ 2028.01", "periodType": "range", "month": 10, "endLabel": "2028.01", "quarter": "Q4", "half": "H2", "content": "아이다", "producer": "신시컴퍼니", "location": "블루스퀘어 우리은행홀", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 21, "company": "뉴컨텐츠컴퍼니", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "뮤지컬 '프랑켄슈타인'", "issueTitleRaw": "뮤지컬 '프랑켄슈타인", "issueType": "스포츠 / 문화", "scope": "기업", "periodRaw": "2027.06 ~ 09", "periodType": "range", "month": 6, "endMonth": 9, "quarter": "Q2", "half": "H1", "content": "프랑켄슈타인", "producer": "뉴컨텐츠컴퍼니", "location": "블루스퀘어 우리은행홀", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 22, "company": "에스앤코(S&CO)", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "뮤지컬 '알라딘'", "issueType": "스포츠 / 문화", "scope": "기업", "periodRaw": "2027.07.03 ~ 08.12", "periodType": "range", "month": 7, "day": 3, "endMonth": 8, "endDay": 12, "quarter": "Q3", "half": "H2", "content": "알라딘", "producer": "에스앤코(S&CO)", "location": "예술의전당 오페라극장", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 23, "company": "라이브네이션코리아", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "마룬파이브 내한 공연 (킨텍스)", "issueType": "스포츠 / 문화", "scope": "기업", "periodRaw": "2027.01.27", "periodType": "date", "month": 1, "day": 27, "quarter": "Q1", "half": "H1", "opportunity": "공연 예고·예매 오픈 고지", "sources": [{"label": "출처 기사", "url": "https://www.sportsworldi.com/newsView/20260804514208"}], "sheets": ["최종정리"]},
+  {"id": 24, "company": "CJ ENM", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "뮤지컬 '킹키부츠'", "issueType": "스포츠 / 문화", "scope": "기업", "periodRaw": "2027.11 ~ 2028.02", "periodType": "range", "month": 11, "endLabel": "2028.02", "quarter": "Q4", "half": "H2", "content": "킹키부츠", "producer": "CJ ENM", "location": "충무아트센터 대극장", "agency": "엘리야컴", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 25, "company": "KBL (한국프로농구)", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "출범 30주년 (1997.02.01 첫 경기)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.02.01", "periodType": "date", "month": 2, "day": 1, "quarter": "Q1", "half": "H1", "description": "• 출범 20주년 당시 특별 엠블럼 공개 및 역대 레전드 선수 기념행사 진행", "anniversary": "출범 30주년", "founded": "1997.02.01 첫 경기", "pastCampaign": "20주년 특별 엠블럼·레전드 기념행사(2017)", "opportunity": "30주년 엠블럼·레전드 영상 송출", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 26, "company": "한국닌텐도", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "'젤다의 전설' 실사 영화 개봉", "issueTitleRaw": "젤다의 전설' 실사 영화 개봉", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027.04.30", "periodType": "date", "month": 4, "day": 30, "quarter": "Q2", "half": "H1", "agency": "덴츠코리아", "agencyTypes": ["전면대행"], "opportunity": "개봉 주간 대형 예고편 송출", "note": "원본에 같은 이슈가 두 번 기재 (다른 행: 닌텐도 · 2027.11). 두 행의 일정·출처가 '겨울왕국3'↔'젤다의 전설' 간에 서로 뒤바뀌어 있어, LUUX 제안 포인트가 적힌 행 기준으로 표시 — 일정 확인 필요", "sources": [{"label": "출처 기사", "url": "https://www.chosun.com/economy/tech_it/2026/09/09/JMINQFI6FJDD3JTGA2LHG6A5CY/"}, {"label": "서울경제", "url": "https://www.sedaily.com/article/20079964?ref=kpf"}], "sheets": ["최종정리"]},
+  {"id": 27, "company": "워너브라더스픽처스코리아", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'맨 오브 투모로우'(슈퍼맨 속편) 개봉", "issueTitleRaw": "맨 오브 투모로우'(슈퍼맨 속편) 개봉", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027.07.09 (북미)", "periodType": "date", "month": 7, "day": 9, "quarter": "Q3", "half": "H2", "agency": "대홍기획-스푼", "agencyTypes": ["매체대행", "매체대행(바잉)"], "opportunity": "개봉 주간 대형 예고편 송출", "sources": [{"label": "출처 기사", "url": "https://rapidcitypost.com/?p=43854"}], "sheets": ["최종정리"]},
+  {"id": 28, "company": "라이엇 게임즈 코리아", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "LoL 월드 챔피언십 한국 개최 (4년 만)", "issueType": "스포츠 / 문화", "scope": "기업", "periodRaw": "2027.10.15~11.14", "periodType": "range", "month": 10, "day": 15, "endMonth": 11, "endDay": 14, "quarter": "Q4", "half": "H2", "description": "• 국내외 팬 대상 브랜드 노출·현장 참여 확대 기회", "organizer": "라이엇게임즈", "location": "대한민국, 세부 장소 미정", "agency": "일그램", "agencyTypes": ["전면대행"], "opportunity": "롤드컵 기간 응원·경기 일정 송출 — 해외 팬 방한", "linkPoint": "• 구단 공식 홍보 영상 송출\n• 중화권 팬덤 광고 상품 제안\n• 중계권 협의 시 도심 야외 단체 관람 제안", "sources": [{"label": "출처 기사", "url": "https://www.kmib.co.kr/article/view.asp?arcid=0029500454&code=61162012&cp=kd"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 29, "company": "디즈니코리아", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'겨울왕국3' 개봉", "issueTitleRaw": "겨울왕국3' 개봉", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027.11", "periodType": "month", "month": 11, "quarter": "Q4", "half": "H2", "agency": "스타콤-환은미디어", "opportunity": "겨울왕국3 개봉 — 연말 시즌 가족 관객 대형 비주얼", "note": "원본에 같은 이슈가 두 번 기재 (다른 행: 디즈니코리아 · 2027.04.30). 두 행의 일정·출처가 '겨울왕국3'↔'젤다의 전설' 간에 서로 뒤바뀌어 있어, LUUX 제안 포인트가 적힌 행 기준으로 표시 — 일정 확인 필요", "sources": [{"label": "출처 기사", "url": "https://www.sedaily.com/article/20079964"}, {"label": "조선일보", "url": "https://www.chosun.com/economy/tech_it/2026/09/09/JMINQFI6FJDD3JTGA2LHG6A5CY/?utm_source=bigkinds&utm_medium=original&utm_campaign=news"}], "sheets": ["최종정리"]},
+  {"id": 30, "company": "디즈니코리아", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "디즈니+ '신빨스테이' 글로벌 공개 ('운명전쟁49' 스핀오프)", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년", "periodType": "year", "agency": "스타콤-환은미디어", "opportunity": "공개 주간 예고편 송출", "sources": [{"label": "출처 기사", "url": "https://www.viva100.com/article/20260730501067"}], "sheets": ["최종정리"]},
+  {"id": 31, "company": "디즈니코리아", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "디즈니+ '연애선수촌' 공개 (스포츠 선수 연애 리얼리티)", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년", "periodType": "year", "agency": "스타콤-환은미디어", "opportunity": "공개 주간 예고편 송출", "sources": [{"label": "출처 기사", "url": "https://www.viva100.com/article/20260915500271"}], "sheets": ["최종정리"]},
+  {"id": 32, "company": "디즈니코리아", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "디즈니+ '내가 죄인이오' 공개 (박서준·엄태구 주연)", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년", "periodType": "year", "agency": "스타콤-환은미디어", "opportunity": "공개 주간 예고편 송출", "sources": [{"label": "출처 기사", "url": "https://www.viva100.com/article/20260331500820"}], "sheets": ["최종정리"]},
+  {"id": 33, "company": "웹젠", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "네이버웹툰 IP 전략 RPG 'PROJECT D1' 출시", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 중", "periodType": "year", "opportunity": "웹툰 IP 신작 런칭 광고", "sources": [{"label": "출처 기사", "url": "https://www.edaily.co.kr/News/Read?newsId=02499366645546008&mediaCodeNo=257"}], "sheets": ["최종정리"]},
+  {"id": 34, "company": "라이브네이션코리아", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "브루노마스 4년 만의 내한 공연 (고양)", "issueType": "스포츠 / 문화", "scope": "기업", "periodRaw": "2027.05", "periodType": "month", "month": 5, "quarter": "Q2", "half": "H1", "sourceNote": "4년 만의 내한 공연 (고양)", "sources": [{"label": "출처 기사", "url": "https://www.kukinews.com/article/view/kuk202608270133"}], "sheets": ["최종정리"]},
+  {"id": 35, "company": "마스트엔터테인먼트", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "뮤지컬 '노트르담 드 파리' 한국어 초연 20주년 (블루스퀘어 우리은행홀)", "issueType": "스포츠 / 문화", "scope": "기업", "periodRaw": "2027.03~05", "periodType": "range", "month": 3, "endMonth": 5, "quarter": "Q1", "half": "H1", "content": "노트르담 드 파리", "producer": "마스트인터내셔널", "location": "블루스퀘어 우리은행홀", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 36, "company": "에이콤", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "뮤지컬 '영웅' 11연 (세종문화회관 대극장)", "issueType": "스포츠 / 문화", "scope": "기업", "periodRaw": "2027.06~08", "periodType": "range", "month": 6, "endMonth": 8, "quarter": "Q2", "half": "H1", "content": "영웅", "producer": "에이콤", "location": "세종문화회관 대극장", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 37, "company": "롯데월드타워 (롯데물산)", "industry": "유통", "industryRaw": "유통·이커머스", "title": "공식 개장 10주년 (2017.04.03)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.04.03", "periodType": "date", "month": 4, "day": 3, "quarter": "Q2", "half": "H1", "description": "• 5주년 'High Five Festival' 24일간 개최 (대형 벨리곰, 버스킹, 사진 공모전, 스카이런 등)", "anniversary": "개장 10주년", "founded": "2017.04.03 공식 개장", "agency": "대홍기획", "pastCampaign": "5주년 'High Five Festival' 24일간 개최(2022)", "opportunity": "10주년 축제 예고 — 서울 대표 랜드마크 간 연계", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 38, "company": "무신사", "industry": "유통", "industryRaw": "유통·이커머스", "title": "무신사 스탠다드 론칭 10주년 (2017.08)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.08", "periodType": "month", "month": 8, "quarter": "Q3", "half": "H2", "description": "• 별도의 N주년 행사 이력 없음", "anniversary": "런칭 10주년", "founded": "2017.08 런칭", "agency": "이노션", "agencyTypes": ["전면대행"], "pastCampaign": "없음 — 별도 N주년 행사 이력 없음", "opportunity": "외국인 쇼핑 수요 — 10주년 글로벌 캠페인", "sources": [{"label": "출처 기사", "url": "https://newsroom.musinsa.com/"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 39, "company": "크라운제과", "industry": "식음료", "industryRaw": "식음료·외식", "title": "창립 80주년 (1947.03)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.03", "periodType": "month", "month": 3, "quarter": "Q1", "half": "H1", "description": "• 1947년 3월 영일당제과로 설립\n• 과거 N주년 캠페인 이력 확인 필요", "anniversary": "80주년", "founded": "1947.03", "opportunity": "80년 장수 브랜드 헤리티지 캠페인", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 40, "company": "롯데웰푸드", "industry": "식음료", "industryRaw": "식음료·외식", "title": "창립 60주년 (1967.04.03, 구 롯데제과)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.04.03", "periodType": "date", "month": 4, "day": 3, "quarter": "Q2", "half": "H1", "description": "• 롯데그룹의 모태 기업\n• 50주년 당시 레트로 기획 상품 출시 및 기념식 개최", "anniversary": "60주년", "founded": "1967.04.03", "agency": "대홍기획", "pastCampaign": "50주년 레트로 기획상품·기념식(2017)", "opportunity": "60년 장수 브랜드 헤리티지 캠페인", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 41, "company": "롯데칠성음료", "industry": "식음료", "industryRaw": "식음료·외식", "title": "칸타타 출시 20주년 (2007.04)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.04", "periodType": "month", "month": 4, "quarter": "Q2", "half": "H1", "description": "• 별도의 N주년 행사 이력 없음", "anniversary": "출시 20주년", "founded": "2007.04 출시", "agency": "이노션", "agencyTypes": ["기획 및 제작대행"], "pastCampaign": "없음 — 별도 N주년 행사 이력 없음", "opportunity": "20주년 브랜드 캠페인", "sources": [{"label": "출처 기사", "url": "https://company.lottechilsung.co.kr/kor/company/news/view.do?detailsKey=868"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 42, "company": "아웃백스테이크하우스", "industry": "식음료", "industryRaw": "식음료·외식", "title": "한국 진출 30주년 (1997.04.29)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.04.29", "periodType": "date", "month": 4, "day": 29, "quarter": "Q2", "half": "H1", "description": "• 2017년 한국 진출 20주년 기념 토마호크 스테이크 출시 및 재즈콘서트 개최", "anniversary": "한국 진출 30주년", "founded": "1997.04.29 1호점(공항점) 오픈", "agency": "HS AD", "agencyTypes": ["전면대행"], "pastCampaign": "20주년 토마호크 출시·재즈콘서트(2017)", "opportunity": "30주년 기념 메뉴·이벤트 고지", "sources": [{"label": "출처 기사", "url": "https://www.outback.co.kr/recruit/companyAboutus.do?menuIdx=81"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 43, "company": "동아오츠카", "industry": "식음료", "industryRaw": "식음료·외식", "title": "포카리스웨트 국내 출시 40주년 (1987.05)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.05", "periodType": "month", "month": 5, "quarter": "Q2", "half": "H1", "description": "• 1987년 국내 출시, 누적 133억 캔 판매(2024년 기준)\n• 30주년(2017년) 트와이스 전속모델 기용 기념 캠페인 진행\n• 2017년 30주년 당시 트와이스 모델 전용 광고 제작 및 전시회·SNS 캠페인·경품 행사 진행", "anniversary": "국내 출시 40주년", "founded": "1987.05 국내 출시", "organizer": "동아오츠카", "agency": "크리에이티비젼", "agencyTypes": ["기획 및 제작대행"], "pastCampaign": "30주년 전용 광고·전시·SNS 캠페인(2017)", "opportunity": "40주년 캠페인 — 여름 성수기 직전 노출", "linkPoint": "• 여름 성수기 직전 40주년 캠페인 런칭 송출\n• 파란 물결이 화면 밖으로 쏟아지는 3D 아나모픽 '청량감' 연출", "sources": [{"label": "출처 기사", "url": "https://donga-otsuka.co.kr/sub1/sub3.asp"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 44, "company": "서울우유협동조합", "industry": "식음료", "industryRaw": "식음료·외식", "title": "창립 90주년 (1937.07.11)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.07.11", "periodType": "date", "month": 7, "day": 11, "quarter": "Q3", "half": "H2", "description": "• 1937년 7월 11일 '경성우유동업조합'으로 출발\n• 2017년 창립 80주년 공식 기념행사 및 고객 감사 이벤트 진행", "anniversary": "90주년", "founded": "1937.07.11", "agency": "엔씨씨애드", "agencyTypes": ["전면대행"], "pastCampaign": "80주년 대대적 기념·고객 감사 이벤트(2017)", "opportunity": "90주년 감사 캠페인", "sources": [{"label": "출처 기사", "url": "https://www.seoulmilk.co.kr/enterprise/company/history.sm"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 45, "company": "빙그레", "industry": "식음료", "industryRaw": "식음료·외식", "title": "창립 60주년 (1967.09.13)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.09.13", "periodType": "date", "month": 9, "day": 13, "quarter": "Q3", "half": "H2", "description": "• 기업 창립보다 제품별 출시 N주년 마케팅이 활발 (바나나맛우유·요플레·투게더 등)\n• 대표 제품 중심 '60년' 헤리티지 소재 제작 가능", "anniversary": "60주년", "founded": "1967.09.13 (대일양행으로 시작)", "agency": "런랩", "pastCampaign": "제품별 N주년 마케팅 활발(바나나맛우유 등)", "opportunity": "대표 제품 중심 60주년 헤리티지 소재", "sources": [{"label": "출처 기사", "url": "https://www.bing.co.kr/company/history"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 46, "company": "CJ푸드빌", "industry": "식음료", "industryRaw": "식음료·외식", "title": "뚜레쥬르·VIPS 런칭 30주년 (1997)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027년 중", "periodType": "year", "pastCampaign": "20주년 프리미엄 케이크·뉴욕스테이크 출시 프로모션(2017)", "opportunity": "30주년 기념 프로모션 고지", "sheets": ["최종정리"]},
+  {"id": 47, "company": "바디프랜드", "industry": "뷰티·패션", "industryRaw": "뷰티·패션·생활", "title": "창립 20주년 (2007.03.03)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.03.03", "periodType": "date", "month": 3, "day": 3, "quarter": "Q1", "half": "H1", "description": "• 창립 10주년 당시 본사 기념식으로 진행", "anniversary": "20주년", "founded": "2007.03.03", "pastCampaign": "10주년 본사 기념식(2017)", "opportunity": "20주년 브랜드 캠페인", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 48, "company": "한섬", "industry": "뷰티·패션", "industryRaw": "뷰티·패션·생활", "title": "창립 40주년 (1987.05.25)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.05.25", "periodType": "date", "month": 5, "day": 25, "quarter": "Q2", "half": "H1", "description": "• 기업 단위보다 개별 브랜드 단위 N주년 활용이 효과적일 것으로 판단", "anniversary": "40주년", "founded": "1987.05.25", "opportunity": "40주년 — 개별 브랜드 단위 캠페인 제안", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 49, "company": "아이아이컴바인드 (탬버린즈)", "industry": "뷰티·패션", "industryRaw": "뷰티·패션·생활", "title": "탬버린즈 런칭 10주년 (2017.09)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.09", "periodType": "month", "month": 9, "quarter": "Q3", "half": "H2", "description": "• 별도의 N주년 행사 이력 없음", "anniversary": "런칭 10주년", "founded": "2017.09 런칭", "pastCampaign": "없음 — 별도 N주년 행사 이력 없음", "opportunity": "외국인 인기 K뷰티 — 10주년 글로벌 캠페인", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 50, "company": "신세계인터내셔날 (스튜디오 톰보이)", "industry": "뷰티·패션", "industryRaw": "뷰티·패션·생활", "title": "스튜디오 톰보이 런칭 50주년 (1977)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027년 중", "periodType": "year", "description": "• 공식 사이트에서 1977년 런칭 강조\n• 런칭 40주년 당시 브랜드 위크 진행", "anniversary": "런칭 50주년", "founded": "1977 런칭", "agency": "TBWA-브랜드브릿지", "pastCampaign": "40주년 브랜드 위크(2017)", "opportunity": "50주년 브랜드 캠페인", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 51, "company": "아모레퍼시픽", "industry": "뷰티·패션", "industryRaw": "뷰티·패션·생활", "title": "설화수 브랜드 출범 30주년 (1997)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027년 중", "periodType": "year", "description": "• 1966년 ABC인삼크림, 1987년 '설화'를 거쳐 1997년 '설화수'로 출범\n• 과거 N주년 캠페인 이력 확인 필요", "anniversary": "브랜드 출범 30주년", "founded": "1997 출범", "agency": "몽규, 제일기획", "agencyTypes": ["전면대행"], "opportunity": "K뷰티 대표 럭셔리 — 외국인 대상 30주년 캠페인", "sources": [{"label": "출처 기사", "url": "https://namu.wiki/w/%EC%84%A4%ED%99%94%EC%88%98"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 52, "company": "동국제약", "industry": "뷰티·패션", "industryRaw": "뷰티·패션·생활", "title": "의과학 신규 화장품 브랜드 '마데카랩스' 출시", "issueType": "신제품 / 서비스 출시", "scope": "기업", "periodRaw": "2027년 상반기", "periodType": "half", "half": "H1", "agency": "동국헬스케어홀딩스", "agencyTypes": ["전면대행"], "opportunity": "신규 뷰티 브랜드 런칭 — 외국인 대상 K뷰티 소재", "sources": [{"label": "출처 기사", "url": "https://www.mt.co.kr/thebio/2026/07/24/2026072411340676527"}], "sheets": ["최종정리"]},
+  {"id": 53, "company": "구찌", "industry": "뷰티·패션", "industryRaw": "뷰티·패션·생활", "title": "구글 협업 AI 안경 출시", "issueType": "신제품 / 서비스 출시", "scope": "기업", "periodRaw": "2027년 중", "periodType": "year", "agency": "스타콤", "agencyTypes": ["매체대행", "매체대행(바잉)"], "opportunity": "럭셔리×테크 런칭 — 구글과 공동 제안", "sources": [{"label": "출처 기사", "url": "https://www.etnews.com/20260417000113"}], "sheets": ["최종정리"]},
+  {"id": 54, "company": "서울특별시", "industry": "뷰티·패션", "industryRaw": "뷰티·패션·생활", "title": "서울패션위크 (동대문 DDP) — 31개 브랜드 런웨이·트레이드쇼·시민 참여 팝업", "issueType": "대형 행사 / 이벤트", "scope": "행사", "periodRaw": "매년 상·하반기", "periodType": "recurring", "recurLabel": "매년 상·하반기", "agency": "이너스커뮤니티", "agencyTypes": ["기획 및 제작대행"], "sheets": ["최종정리"]},
+  {"id": 55, "company": "GC녹십자", "industry": "기타", "industryRaw": "제약·헬스케어", "title": "창립 60주년 (1967.10.05)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.10.05", "periodType": "date", "month": 10, "day": 5, "quarter": "Q4", "half": "H2", "description": "• 1967년 10월 5일 '수도미생물약품판매주식회사'로 출범", "anniversary": "60주년", "founded": "1967.10.05", "opportunity": "60주년 기업 PR", "sources": [{"label": "출처 기사", "url": "https://www.gcbiopharma.com/kor/news_view.do?currentPage=1&idx=3089"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 56, "company": "동화약품", "industry": "기타", "industryRaw": "제약·헬스케어", "title": "창립 130주년 (1897년, 국내 최장수 제약사)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027년 중", "periodType": "year", "description": "• 국내 최장수 제약사 (활명수)\n• 2017년 창립 120주년 기념 헌혈 캠페인 진행\n• 2025년 1897년 창업터에 신사옥 입주", "anniversary": "130주년", "founded": "1897 창립", "agency": "이노션", "agencyTypes": ["전면대행"], "pastCampaign": "120주년 헌혈 캠페인(2017) · 1897년 창업터 신사옥 입주(2025)", "opportunity": "130년 활명수 헤리티지 — 서울 도심 창업터와 연결", "sources": [{"label": "출처 기사", "url": "https://www.heraldk.com/article/2025072715594991905"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 57, "company": "보령", "industry": "기타", "industryRaw": "제약·헬스케어", "title": "창업 70주년 (1957년)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027년 중", "periodType": "year", "description": "• 매년 창업 기념행사 개최 (창업 51주년·61주년 기념행사 보도)", "anniversary": "창업 70주년", "founded": "1957 창업", "agency": "일그램", "agencyTypes": ["전면대행"], "pastCampaign": "매년 창업 기념행사 개최", "opportunity": "70주년 기업 PR", "sources": [{"label": "출처 기사", "url": "https://www.etoday.co.kr/news/view/1668555"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 58, "company": "엘알 이스라엘 항공", "industry": "관광·항공", "industryRaw": "여행·항공·관광", "title": "인천–텔아비브 신규 취항 (주 3회, 한국 시장 진출)", "issueType": "사업 확장 / 신규 진출", "scope": "기업", "periodRaw": "2027년 3월~", "periodType": "range", "month": 3, "quarter": "Q1", "half": "H1", "description": "• 인천–텔아비브 직항 신규 취항\n• 국내 인지도 제고 및 관광·성지순례 수요 확보 필요", "opportunity": "신규 취항 인지도 캠페인", "linkPoint": "• 취항일(3.28) D-day 카운트다운 송출 → 취항 주간 집중 노출\n• 3면 파노라마로 텔아비브 풍경을 펼치는 '첫 직항' 비주얼 + 여행사 공동 QR", "sources": [{"label": "출처 기사", "url": "https://www.ajunews.com/view/20260211084342378"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 59, "company": "이스타항공", "industry": "관광·항공", "industryRaw": "여행·항공·관광", "title": "창립 20주년 (2007.10.23) · 중국 4개 노선 신규 취항", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.10.23", "periodType": "date", "month": 10, "day": 23, "quarter": "Q4", "half": "H2", "description": "• 10주년 당시 새 슬로건·엠블럼 공개 및 대규모 특가 이벤트 진행", "anniversary": "20주년", "founded": "2007.10.23", "pastCampaign": "10주년 새 슬로건·엠블럼·특가(2017)", "opportunity": "20주년 특가 캠페인 · 신규 노선 고지", "sources": [{"label": "출처 기사", "url": "https://www.etoday.co.kr/news/view/2621405"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 60, "company": "문화체육관광부", "industry": "관광·항공", "industryRaw": "여행·항공·관광", "title": "FANOMENON 2027 주최 (외국인 20만 포함 52만 명 예상)", "issueType": "대형 행사 / 이벤트", "scope": "기업", "periodRaw": "2027.12.2~12.12", "periodType": "range", "month": 12, "day": 2, "endMonth": 12, "endDay": 12, "quarter": "Q4", "half": "H2", "description": "• K-팝 공연·시상식·체험을 결합한 대규모 K-컬처 축제(한국판 코첼라 지향)\n• 방문객 52만 명(외국인 관광객 20만 명 포함), 경제효과 1조 원 이상 기대", "organizer": "문화체육관광부", "location": "서울아레나·고양 킨텍스 제2전시장", "agency": "엔씨씨애드", "agencyTypes": ["전면대행"], "opportunity": "광화문을 패노메논 연계 구역으로 — 라이브 송출", "linkPoint": "• 두들라이브 커넥트와 같은 형태로 룩스 라이브 및 야외 단체 관람\n• 룩스를 서울아레나/킨텍스와 광화문을 잇는 제2의 구역으로 포지셔닝 가능", "sources": [{"label": "출처 기사", "url": "https://www.ytn.co.kr/_ln/0106_202607271451495590"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 61, "company": "진에어", "industry": "관광·항공", "industryRaw": "여행·항공·관광", "title": "에어부산 통합 예정 (내부 리서치 기준, 사실 확인 필요)", "issueType": "기업 주요 변화", "scope": "기업", "periodRaw": "2027.03.17 (예정)", "periodType": "date", "month": 3, "day": 17, "quarter": "Q1", "half": "H1", "opportunity": "통합 LCC 출범 시 브랜드 캠페인", "sheets": ["최종정리"]},
+  {"id": 62, "company": "파라타항공", "industry": "관광·항공", "industryRaw": "여행·항공·관광", "title": "미주 노선 신규 취항", "issueType": "사업 확장 / 신규 진출", "scope": "기업", "periodRaw": "2027년 중", "periodType": "year", "description": "• 인천–LA 신규 취항 추진\n• 첫 미주 노선 진출에 따른 장거리 서비스 홍보·초기 고객 확보 필요", "opportunity": "신규 취항 인지도 캠페인", "linkPoint": "• 첫 미주 노선(LA) 취항 계기 신생 항공사 브랜드 런칭 캠페인\n• 항공기가 J자 곡면을 돌아 이륙하는 3D 아나모픽 + 조기 예약 특가 QR", "sources": [{"label": "미주 노선 신규 취항", "url": "https://biz.heraldcorp.com/article/10704832"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 63, "company": "에어부산", "industry": "관광·항공", "industryRaw": "여행·항공·관광", "title": "창립 20주년 (2007.08.31) · 2027.03.17 진에어로 통합 예정", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.08.31", "periodType": "date", "month": 8, "day": 31, "quarter": "Q3", "half": "H2", "description": "• 창립 10주년보다 취항(2008) 10주년 중심으로 기념\n• 2027.03.17 진에어로 통합 예정 (내부 리서치 기준, 확인 필요)", "anniversary": "20주년", "founded": "2007.08.31", "pastCampaign": "창립 10주년보다 취항(2008) 10주년을 더 기념", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 64, "company": "현대건설", "industry": "기타", "industryRaw": "건설·에너지·산업", "title": "창립 80주년 (1947.05.25)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.05.25", "periodType": "date", "month": 5, "day": 25, "quarter": "Q2", "half": "H1", "description": "• 1947년 5월 25일 현대토건사 설립일을 창립일로 사용\n• 2026년 5월 '창립 79주년' 공식 콘텐츠 발표", "anniversary": "80주년", "founded": "1947.05.25", "agency": "이노션", "pastCampaign": "79주년 공식 콘텐츠 발표(2026)", "opportunity": "80주년 기업 PR", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 65, "company": "GS칼텍스", "industry": "기타", "industryRaw": "건설·에너지·산업", "title": "창립 60주년 (1967.05.19)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.05.19", "periodType": "date", "month": 5, "day": 19, "quarter": "Q2", "half": "H1", "description": "• 2017년 GS타워에서 창립 50주년 기념식 개최\n• 거래처·협력사·전현직 임직원 약 800명 참여 고객 사은 음악회 및 여수 지역 기념 공연 진행", "anniversary": "60주년", "founded": "1967.05.19", "pastCampaign": "50주년 기념식·고객 사은 음악회(2017)", "opportunity": "60주년 기업 PR", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 66, "company": "한화에어로스페이스", "industry": "기타", "industryRaw": "건설·에너지·산업", "title": "창립 50주년 (1977.08.01) · 서울 ADEX(10.19~24)", "issueType": "창립기념 / Anniversary", "scope": "기업", "periodRaw": "2027.08.01", "periodType": "date", "month": 8, "day": 1, "quarter": "Q3", "half": "H2", "description": "• 과거 창립 기념 캠페인·프로모션 이력 확인되지 않음\n• 방산·우주·항공엔진 기업 정체성 강화로 50주년 상징성 보유\n• 2027.10 서울 ADEX 개최 시기와 연계 가능", "anniversary": "50주년", "founded": "1977.08.01", "pastCampaign": "없음 — 과거 캠페인 확인 안 됨", "opportunity": "50주년 + ADEX — 방산·우주 기업 PR", "sources": [{"label": "출처 기사", "url": "https://seouladex.com/kr/public/seoul-adex/overview.php"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 67, "company": "한국우주항공산업협회, 한국방위산업진흥회", "industry": "기타", "industryRaw": "건설·에너지·산업", "title": "2027 서울 ADEX — 국제 항공우주·방위산업 전시회 (서울공항)", "issueType": "대형 행사 / 이벤트", "scope": "행사", "periodRaw": "2027.10.19~10.24", "periodType": "range", "month": 10, "day": 19, "endMonth": 10, "endDay": 24, "quarter": "Q4", "half": "H2", "description": "• 격년 개최 동북아 최대 항공우주·방산 전시회\n• 2025년 35개국 600개사 참가(역대 최대), 일반 관람일 블랙이글스 에어쇼 진행", "organizer": "한국우주항공산업협회·한국방위산업진흥회", "location": "서울공항(성남)", "opportunity": "LIG D&A 케이스처럼 해당 시기에 항공·방산 기업에 광고 제안", "linkPoint": "• ADEX 참가 주요 방산·항공 기업 대상 행사 기간 집중 PR 송출\n• 전투기·우주·AAM 등 전시 콘텐츠를 활용한 3D 아나모픽 연출", "sources": [{"label": "출처 기사", "url": "https://seouladex.com/kr/public/seoul-adex/overview.php"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 68, "company": "교황청, 천주교서울대교구", "industry": "행사·공공", "industryRaw": "행사·공공", "title": "서울 세계청년대회(WYD) — 교황 방문, 파견미사 최대 100만 명 전망 (개막미사 광화문 광장 후보)", "issueType": "대형 행사 / 이벤트", "scope": "행사", "periodRaw": "2027.08.03~08.08", "periodType": "range", "month": 8, "day": 3, "endMonth": 8, "endDay": 8, "quarter": "Q3", "half": "H2", "description": "• 제41차 세계 젊은이의 날 국제 단계 행사\n• 파견미사 기준 최대 100만 명 참석 전망", "organizer": "교황청·천주교서울대교구·2027 서울 WYD 조직위", "location": "일정별 상이. 광화문광장도 개막미사·교황환영행사 후보지로 검토 중", "opportunity": "각국 청년 순례자 대상 'Welcome to Seoul' 글로벌 환영 캠페인 · 항공/통신/카드/결제/소매 업종 제안", "linkPoint": "• 각국 청년·순례자 대상 글로벌 환영 캠페인 제안\n• 2023 리스본 WYD는 MEO(통신)·TAP(항공)을 공식 파트너로 선정해 프로모션 진행\n• 서울 WYD 파트너십 발표 시 광고 제안 검토", "sources": [{"label": "출처 기사", "url": "https://wydseoul.org/"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 69, "company": "국제대학스포츠연맹(FISU)", "industry": "행사·공공", "industryRaw": "행사·공공", "title": "2027 충청 유니버시아드대회 — 150여 개국 1만 5천여 명 참가 (대전·세종·충북·충남)", "issueType": "스포츠 / 문화", "scope": "행사", "periodRaw": "2027.08.01~08.12", "periodType": "range", "month": 8, "day": 1, "endMonth": 8, "endDay": 12, "quarter": "Q3", "half": "H2", "opportunity": "글로벌 환영 캠페인", "sources": [{"label": "출처 기사", "url": "https://www.chungcheong2027.com/home/main.do"}], "sheets": ["최종정리"]},
+  {"id": 70, "company": "사단법인 한국교회총연합", "industry": "행사·공공", "industryRaw": "행사·공공", "title": "부활절 퍼레이드 (광화문 광장 일대) — 연례행사, 2027년 진행 가능성 높음", "issueType": "대형 행사 / 이벤트", "scope": "행사", "periodRaw": "매년 4월 초중순 토요일", "periodType": "month", "month": 4, "quarter": "Q2", "half": "H1", "sources": [{"label": "출처 기사", "url": "https://www.k-easter.com/"}], "sheets": ["최종정리"]},
+  {"id": 71, "company": "서울특별시", "industry": "행사·공공", "industryRaw": "행사·공공", "title": "한강 불빛 공연 드론라이트쇼 — 드론 1,200~2,000대 (뚝섬·여의도·잠실한강공원)", "issueType": "대형 행사 / 이벤트", "scope": "행사", "periodRaw": "상·하반기 각 5회", "periodType": "recurring", "recurLabel": "상·하반기 각 5회", "description": "• 최대 2,000대 규모 드론 활용, 회차별 IP 협업(BT21·스타워즈·마블 등)\n• 2026년 상반기 12.5만 명 방문, 외국인 비율 34.6%", "organizer": "서울특별시", "location": "뚝섬·여의도·잠실 한강공원", "agency": "이너스커뮤니티", "agencyTypes": ["기획 및 제작대행"], "linkPoint": "• 드론쇼 협업 IP·기업 대상 '한강 하늘 + 광화문 LUUX' 동시 노출 패키지\n• 공연 당일 동일 연출 LUUX 동시 송출 + QR 참여 이벤트", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 72, "company": "주한영국대사관", "industry": "행사·공공", "industryRaw": "행사·공공", "title": "G20 맨체스터 정상회의", "issueType": "대형 행사 / 이벤트", "scope": "행사", "periodRaw": "미정", "periodType": "tbd", "sheets": ["최종정리"]},
+  {"id": 73, "company": "아시아 축구 연맹", "industry": "행사·공공", "industryRaw": "행사·공공", "title": "2027 아시안컵", "issueType": "스포츠 / 문화", "scope": "행사", "periodRaw": "2027. 1. 7. – 2027. 2. 5", "periodType": "range", "month": 1, "day": 7, "endMonth": 2, "endDay": 5, "quarter": "Q1", "half": "H1", "sheets": ["최종정리"]},
+  {"id": 74, "company": "엔씨소프트", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "'호라이즌 스틸 프론티어스' 출시", "issueTitleRaw": "호라이즌 스틸 프론티어스' 출시", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 상반기 목표", "periodType": "half", "half": "H1", "description": "글로벌 인기 Horizon IP 기반 MMORPG.\n원작의 기계 생명체 사냥·헌팅 액션에 대규모 전투와 MMO 시스템을 결합.\nPC·모바일 크로스플랫폼 글로벌 타이틀", "content": "호라이즌 스틸 프론티어스 (Horizon Steel Frontiers)", "agency": "대홍기획", "agencyTypes": ["전면대행"], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 75, "company": "엔씨소프트", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "'아스트라에 오라티오' 출시", "issueTitleRaw": "아스트라에 오라티오' 출시", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 이후", "periodType": "tbd", "description": "서브컬처 장르 신작.\n엔씨가 퍼블리싱하며 글로벌 시장을 겨냥한 신규 IP.\n2026년 IR 기준 세부 출시일은 미정", "content": "아스트라에 오라티오 (Astrae Oratio)", "agency": "대홍기획", "agencyTypes": ["전면대행"], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 76, "company": "엔씨소프트", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "'DEFECT' 출시", "issueTitleRaw": "DEFECT' 출시", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 이후", "periodType": "tbd", "description": "북미 스튜디오 Emptyvessel의 사이버펑크 FPS.\n글로벌 PC·콘솔 시장을 겨냥한 슈팅 신작.\n세부 출시일 미정", "content": "DEFECT", "agency": "대홍기획", "agencyTypes": ["전면대행"], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 77, "company": "엔씨소프트", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "'본파이어' 출시", "issueTitleRaw": "본파이어' 출시", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 이후", "periodType": "tbd", "description": "엔씨의 차세대 슈터 프로젝트.\n2026 Gamescom에서 본격 공개되는 글로벌 신작으로, 세부 정보 및 정식 타이틀 공개 예정", "content": "본파이어 (Bonfire)", "agency": "대홍기획", "agencyTypes": ["전면대행"], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 78, "company": "엔씨소프트", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "'Project R' 출시", "issueTitleRaw": "Project R' 출시", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 이후", "periodType": "tbd", "description": "신규 MMO 프로젝트.\n엔씨가 2027년 이후 파이프라인으로 직접 언급.\n아직 세부 게임 정보는 제한적", "content": "Project R", "agency": "대홍기획", "agencyTypes": ["전면대행"], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 79, "company": "카카오게임즈", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "'오딘Q: 발키리스콜' 출시", "issueTitleRaw": "오딘Q: 발키리스콜' 출시", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 1월 목표", "periodType": "month", "month": 1, "quarter": "Q1", "half": "H1", "description": "흥행작 〈오딘: 발할라 라이징〉 IP 후속작.\n북유럽 신화 '에다' 기반, Unreal Engine 5, 쿼터뷰 방식의 풀 3D 심리스 오픈월드 MMORPG.\n글로벌 확장 타깃", "content": "오딘Q: 발키리스콜", "agency": "퍼틸레인", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 80, "company": "카카오게임즈", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "'크로노 오디세이' 출시", "issueTitleRaw": "크로노 오디세이' 출시", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 예정", "periodType": "year", "description": "AAA급 오픈월드 액션 RPG.\n광활한 오픈월드와 '시간 조작' 시스템이 핵심.\nPC·콘솔 기반 글로벌 타이틀", "content": "크로노 오디세이", "agency": "퍼틸레인", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 81, "company": "카카오게임즈", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "'갓 세이브 버밍엄' 출시", "issueTitleRaw": "갓 세이브 버밍엄' 출시", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 예정", "periodType": "year", "description": "중세 영국 버밍엄을 배경으로 하는 오픈월드 좀비 생존 시뮬레이터.\nPC·콘솔 기반 글로벌 타깃", "content": "갓 세이브 버밍엄", "agency": "퍼틸레인", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 82, "company": "펄어비스", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "'붉은사막 Switch 2 버전' 출시", "issueTitleRaw": "붉은사막 Switch 2 버전' 출시", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 상반기 목표", "periodType": "half", "half": "H1", "description": "2026년 출시된 오픈월드 액션 어드벤처 붉은사막의 Nintendo Switch 2 버전.\n완전 신작은 아님", "content": "붉은사막 Switch 2 버전", "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 83, "company": "넥슨", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "'낙원: LAST PARADISE' 출시", "issueTitleRaw": "낙원: LAST PARADISE' 출시", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년", "periodType": "year", "description": "서울을 모티브로 한 포스트 아포칼립스 세계관의 PvPvE 익스트랙션 생존 게임.\n글로벌 클로즈 알파에서 동시접속자 약 3.7만 명 기록", "content": "낙원: LAST PARADISE", "agency": "HS AD", "agencyTypes": ["전면대행"], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 84, "company": "넥슨", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "'빈딕투스: 디파잉 페이트' 출시", "issueTitleRaw": "빈딕투스: 디파잉 페이트' 출시", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년", "periodType": "year", "description": "마비노기 영웅전 IP 기반 PC·콘솔 액션 RPG.\n원작 세계관과 캐릭터를 재해석한 고품질 액션 중심 신작", "content": "빈딕투스: 디파잉 페이트", "agency": "HS AD", "agencyTypes": ["전면대행"], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 85, "company": "넥슨", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "'던전앤파이터 클래식' 출시", "issueTitleRaw": "던전앤파이터 클래식' 출시", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년", "periodType": "year", "description": "던전앤파이터의 초기 플레이 경험을 현대적으로 재현하는 2D 액션 RPG.\n넥슨의 핵심 던파 IP 확장작", "content": "던전앤파이터 클래식", "agency": "HS AD", "agencyTypes": ["전면대행"], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 86, "company": "넥슨", "industry": "게임", "industryRaw": "게임·콘텐츠·엔터", "title": "'고질라 디펜스 포스: X' 출시", "issueTitleRaw": "고질라 디펜스 포스: X' 출시", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 1분기", "periodType": "quarter", "quarter": "Q1", "half": "H1", "description": "글로벌 인지도가 높은 고질라 IP 활용 신작.\n2026년 2분기 실적발표에서 2027년 1분기 라인업으로 제시", "content": "고질라 디펜스 포스: X", "agency": "HS AD", "agencyTypes": ["전면대행"], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 87, "company": "넷플릭스", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'괸당' 개봉/공개", "issueTitleRaw": "괸당' 개봉/공개", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 상반기 공개 예정 · 월·일 미발표", "periodType": "half", "half": "H1", "description": "제주 세 가문의 패권 다툼을 그린 누아르.\n한석규·윤계상 등이 출연하고 스튜디오N·엔젤그라운드가 공동 제작.", "content": "괸당", "agency": "제일기획", "agencyTypes": ["전면대행"], "sources": [{"label": "국민일보", "url": "https://www.kmib.co.kr/article/view.asp?arcid=0029387909"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 88, "company": "넷플릭스", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'기생수: 타미야' 개봉/공개", "issueTitleRaw": "기생수: 타미야' 개봉/공개", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 공개 예정 · 월·일 미발표", "periodType": "year", "description": "한국 제작사 와우포인트가 기획·제작하고 연상호가 기획·각본에 참여한 일본 시리즈.", "content": "기생수: 타미야", "agency": "제일기획", "agencyTypes": ["전면대행"], "sources": [{"label": "넷플릭스 공식(한국어)", "url": "https://about.netflix.com/ko/news/parasyte-tamiya-announcement"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 89, "company": "디즈니+", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'나미야 잡화점의 기적' 개봉/공개", "issueTitleRaw": "나미야 잡화점의 기적' 개봉/공개", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 공개 예정 · 월·일 미발표", "periodType": "year", "description": "히가시노 게이고 소설의 한국 드라마화.\n류승룡·김혜윤 등 출연진을 발표.", "content": "나미야 잡화점의 기적", "agency": "스타콤-환은미디어", "sources": [{"label": "더팩트", "url": "https://news.tf.co.kr/read/entertain/2318760.htm"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 90, "company": "디즈니+", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'코드' 개봉/공개", "issueTitleRaw": "코드' 개봉/공개", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 공개 예정 · 월·일 미발표", "periodType": "year", "description": "남주혁·이이담 주연 한국 시리즈.\n소원을 이루는 대신 대가를 치르는 설정의 미스터리 스릴러.", "content": "코드", "agency": "스타콤-환은미디어", "sources": [{"label": "국내 보도", "url": "https://v.daum.net/v/20260723105052683"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 91, "company": "디즈니+", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'코리언즈' 개봉/공개", "issueTitleRaw": "코리언즈' 개봉/공개", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 공개 예정 · 월·일 미발표", "periodType": "year", "description": "‘아메리칸즈’의 한국판.\n1990년대 서울의 북한 스파이 부부와 수사관을 다루며 이병헌·한지민·이희준 출연.", "content": "코리언즈", "agency": "스타콤-환은미디어", "sources": [{"label": "알파경제", "url": "https://alphabiz.co.kr/news/view/1065576551276816"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 92, "company": "레드아이스엔터테인먼트 (배급)", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'칼: 고두막한의 검' 개봉/공개", "issueTitleRaw": "칼: 고두막한의 검' 개봉/공개", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 여름 개봉 목표 · 월·일 미발표", "periodType": "season", "season": "여름", "description": "김한민 감독의 액션 사극.\n박보검·주원이 출연하며 고구려 멸망 후 전설의 검을 건 검투 대회를 그린다.", "content": "칼: 고두막한의 검", "sources": [{"label": "NSP통신", "url": "https://www.nspna.com/news/?mode=view&newsid=797680"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 93, "company": "바이포엠스튜디오 (배급)", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'파문(가제)' 개봉/공개", "issueTitleRaw": "파문(가제)' 개봉/공개", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 개봉 예정 · 월·일 미발표", "periodType": "year", "description": "변요한·이솜·김준한 출연.\n불법 가업을 이어온 가문의 후계 다툼을 다루며 2026년 촬영을 마쳤다.\n변요한·이솜·김준한 출연 범죄 영화 ‘파문’ 개봉", "content": "파문(가제)", "note": "원본에 같은 이슈가 두 번 기재 (바이포엠스튜디오 · 2027년) — 한 건으로 통합", "sources": [{"label": "뉴스핌", "url": "https://web3.newspim.com/news/view/20260625000839"}, {"label": "매일경제", "url": "https://www.mk.co.kr/news/movies/12083024"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 94, "company": "에이비오엔터테인먼트 (배급)", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'범죄도시5' 개봉/공개", "issueTitleRaw": "범죄도시5' 개봉/공개", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 상반기 개봉 예정 · 영진위 제작 현황 기준", "periodType": "half", "half": "H1", "description": "마동석·김재영 출연, 허명행 감독의 범죄 액션 후속작.\n광수대 팀장이 된 마석도가 새 범죄자와 맞선다.", "content": "범죄도시5", "sources": [{"label": "영화진흥위원회", "url": "https://www.kobiz.or.kr/jsp/news/statusList.jsp"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 95, "company": "트윈필름 (제작)", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'사피엔스' 개봉/공개", "issueTitleRaw": "사피엔스' 개봉/공개", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 국내 개봉 예정 · 월·일 미발표", "periodType": "year", "description": "정성일·유재명 주연 미스터리 스릴러.\n다중인격 용의자와 변호사가 납치 사건을 추적하며 2026년 부산영화제 초청.", "content": "사피엔스", "sources": [{"label": "뉴스핌", "url": "https://www.newspim.com/news/view/20260922000100"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 96, "company": "티빙", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'러브 바이러스' 개봉/공개", "issueTitleRaw": "러브 바이러스' 개봉/공개", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 공개 예정 · 월·일 미발표", "periodType": "year", "description": "정해인·신세경 주연 로맨스.\n9년 차 커플이 결혼 전 새로운 만남을 시도하는 이야기.", "content": "러브 바이러스", "sources": [{"label": "이데일리", "url": "https://v.daum.net/v/20260901111440065"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 97, "company": "티빙", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'M: 리부트' 개봉/공개", "issueTitleRaw": "M: 리부트' 개봉/공개", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 공개 예정 · 월·일 미발표", "periodType": "year", "description": "1994년 MBC 공포 드라마 ‘M’의 리부트.\n정채연·정건주가 출연하는 공포 스릴러.", "content": "M: 리부트", "sources": [{"label": "씨네플레이", "url": "https://www.cineplay.co.kr/ko-kr/articles/29698"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 98, "company": "티빙", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'여고생왕후' 개봉/공개", "issueTitleRaw": "여고생왕후' 개봉/공개", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 공개 예정 · 월·일 미발표", "periodType": "year", "description": "동명 네이버 웹툰 원작 드라마.\n김세정·배현성·조한결 출연 및 제작 계획 발표.", "content": "여고생왕후", "sources": [{"label": "국내 보도", "url": "https://v.daum.net/v/20260731092737964"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 99, "company": "CJ ENM", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "봉준호 감독의 첫 장편 애니메이션 '앨리' 개봉/공개", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년 상반기", "periodType": "half", "half": "H1", "description": "봉준호 감독의 첫 애니메이션 ‘앨리’ 개봉", "content": "앨리", "agency": "엘리야컴", "sources": [{"label": "스포츠월드", "url": "https://www.sportsworldi.com/newsView/20260403503795"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]},
+  {"id": 100, "company": "디즈니코리아", "industry": "엔터테인먼트", "industryRaw": "게임·콘텐츠·엔터", "title": "'가토' 개봉/공개", "issueTitleRaw": "가토' 개봉/공개", "issueType": "게임 / 콘텐츠 출시", "scope": "기업", "periodRaw": "2027년", "periodType": "year", "description": "디즈니·픽사 신작 애니메이션 ‘가토’ 개봉", "content": "가토", "agency": "스타콤-환은미디어", "sources": [{"label": "부산일보", "url": "https://www.busan.com/view/busan/view.php?code=2026061512001968499"}], "sheets": ["최종정리", "이전 워크북 (특징·연계 포인트·장소 보강)"]}
+];
+</script>
+<style>
+:root{
+  --bg:#F7F8FA; --surface:#FFFFFF; --surface-2:#F9FAFB; --surface-3:#F3F4F6;
+  --text:#111827; --text-2:#374151; --text-3:#6B7280; --text-4:#9CA3AF;
+  --border:#E5E7EB; --border-2:#D1D5DB;
+  --accent:#1E3A5F; --accent-2:#2B4C7E; --accent-soft:#EAF0F8; --accent-ring:rgba(30,58,95,.18);
+  --opp:#8A5A00; --opp-bg:#FFF8EB; --opp-border:#F3DFB5;
+  --radius:10px; --radius-sm:6px;
+  --shadow:0 1px 2px rgba(17,24,39,.04),0 1px 3px rgba(17,24,39,.04);
+  --shadow-lg:0 12px 32px rgba(17,24,39,.14);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font-family:Pretendard,"Pretendard Variable",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;word-break:keep-all}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+input,select{font:inherit;color:inherit}
+.num{font-variant-numeric:tabular-nums}
+/* 좌우 여백 400px (1920px 화면 기준). 더 좁은 화면에서는 본문 폭 1120px 를 지키도록 여백만 줄어듦 */
+.wrap{margin:0 auto;padding:0 clamp(24px, calc((100vw - 1120px) / 2), 400px)}
+
+/* ---------- header ---------- */
+.header{background:var(--surface);border-bottom:1px solid var(--border)}
+.header .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:22px;padding-bottom:18px;flex-wrap:wrap}
+.header-right{display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-left:auto}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--accent-2);text-transform:uppercase;margin-bottom:6px}
+.header h1{margin:0;font-size:42px;font-weight:800;letter-spacing:-.03em;line-height:1.15}
+.header p{margin:4px 0 0;color:var(--text-3);font-size:13px}
+.header-meta{display:flex;gap:18px;color:var(--text-3);font-size:12px;flex-wrap:wrap}
+.header-meta b{color:var(--text);font-weight:700}
+
+/* ---------- sticky control bar ---------- */
+.ctrl{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.96);backdrop-filter:saturate(1.4) blur(6px);border-bottom:1px solid var(--border)}
+.ctrl .wrap{display:flex;align-items:center;gap:14px;padding-top:10px;padding-bottom:10px;flex-wrap:wrap}
+.ctrl-label{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--text-3)}
+.seg{display:inline-flex;background:var(--surface-3);border-radius:8px;padding:3px;gap:2px}
+.seg button{padding:7px 16px;border-radius:6px;font-weight:600;color:var(--text-2);font-size:13px;white-space:nowrap;transition:background .15s,color .15s}
+.seg button:hover{color:var(--text)}
+.seg button.on{background:var(--surface);color:var(--accent);box-shadow:0 1px 2px rgba(17,24,39,.12)}
+.search{position:relative;flex:0 1 300px;min-width:200px;margin-left:auto}
+.search input{width:100%;height:36px;border:1px solid var(--border);border-radius:8px;padding:0 34px 0 34px;background:var(--surface);font-size:13px;outline:none;transition:border-color .15s,box-shadow .15s}
+.search input:focus{border-color:var(--accent-2);box-shadow:0 0 0 3px var(--accent-ring)}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text-4)}
+.search .clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;color:var(--text-3);display:none;align-items:center;justify-content:center}
+.search .clear:hover{background:var(--surface-3)}
+.search.has .clear{display:flex}
+.btn-reset{height:36px;padding:0 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:13px;font-weight:600;color:var(--text-2);white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.btn-reset:hover{border-color:var(--border-2);color:var(--text)}
+.btn-reset:disabled{opacity:.45;cursor:default}
+.active-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;width:100%;min-height:0}
+.active-row:empty{display:none}
+.token{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 6px 0 10px;border-radius:13px;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:600}
+.token button{width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:var(--accent-2)}
+.token button:hover{background:rgba(30,58,95,.12)}
+.result-count{font-size:12px;color:var(--text-3)}
+.result-count b{color:var(--text);font-size:13px}
+
+/* ---------- filters ---------- */
+.filters{background:var(--surface);border-bottom:1px solid var(--border)}
+.filters .wrap{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px 14px;padding-top:12px;padding-bottom:12px;align-items:start}
+.f-label{font-size:12px;font-weight:700;color:var(--text-3);padding-top:5px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{height:28px;padding:0 11px;border:1px solid var(--border);border-radius:15px;background:var(--surface);font-size:12.5px;color:var(--text-2);font-weight:500;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:border-color .12s,background .12s,color .12s}
+.chip:hover{border-color:var(--border-2);color:var(--text)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip.on .c{color:rgba(255,255,255,.75)}
+.chip .c{font-size:11px;color:var(--text-4);font-variant-numeric:tabular-nums}
+.chip .dot{width:8px;height:8px;border-radius:50%}
+.chip.on .dot{box-shadow:0 0 0 2px rgba(255,255,255,.9)}
+.chip.zero{opacity:.45}
+.chip-sep{width:1px;height:18px;background:var(--border);margin:0 4px}
+.chip.m{min-width:46px;justify-content:center;padding:0 8px}
+
+/* ---------- layout ---------- */
+main.wrap{padding-top:20px;padding-bottom:60px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);min-width:0}
+.kpi .k{font-size:12px;color:var(--text-3);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi .v{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-top:4px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi .v small{font-size:13px;font-weight:600;color:var(--text-3);margin-left:3px}
+.kpi .s{font-size:11.5px;color:var(--text-3);margin-top:3px;line-height:1.4}
+.kpi.primary{background:var(--accent);border-color:var(--accent)}
+.kpi.primary .k,.kpi.primary .s{color:rgba(255,255,255,.72)}
+.kpi.primary .v{color:#fff}
+.kpi.primary .v small{color:rgba(255,255,255,.7)}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.card-h h2{margin:0;font-size:15px;font-weight:700;letter-spacing:-.01em}
+.card-h .sub{font-size:12px;color:var(--text-3);margin-top:2px}
+.card-b{padding:16px 18px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--text-2)}
+.legend span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.legend i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.grid-2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;margin-top:16px}
+.grid-2b{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:16px}
+
+/* ---------- annual swimlane ---------- */
+.swim-scroll{overflow-x:auto;overflow-y:hidden}
+.swim{display:grid;grid-template-columns:108px repeat(12,minmax(88px,1fr)) minmax(132px,1.25fr);min-width:1296px}
+.swim .qband{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--text-3);text-align:center;padding:8px 0 6px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+.swim .qband.q-odd{background:#F2F4F7}
+.swim .qband.tbd{background:repeating-linear-gradient(135deg,#F6F7F9 0 6px,#EFF1F4 6px 7px)}
+.swim .mh{padding:8px 8px 7px;border-bottom:1px solid var(--border);border-left:1px solid var(--border);text-align:left;cursor:pointer;transition:background .12s}
+.swim .mh:hover{background:var(--surface-2)}
+.swim .mh .mn{font-size:13px;font-weight:700}
+.swim .mh .mc{font-size:11px;color:var(--text-3)}
+.swim .mh .mc b{color:var(--text);font-size:12px}
+.swim .mh.sel{background:var(--accent-soft)}
+.swim .mh.sel .mn{color:var(--accent)}
+.swim .corner{border-bottom:1px solid var(--border);padding:8px 12px;font-size:11px;color:var(--text-3);display:flex;align-items:flex-end}
+.lane{position:sticky;left:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);padding:10px 10px 10px 12px;display:flex;flex-direction:column;justify-content:flex-start;gap:2px;cursor:pointer;box-shadow:1px 0 0 var(--border)}
+.lane:hover .ln{color:var(--accent)}
+.lane .ln{font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;white-space:nowrap}
+.lane .ln i{width:9px;height:9px;border-radius:50%;flex:none}
+.lane .lc{font-size:11px;color:var(--text-3);padding-left:16px}
+.lane.empty .ln{color:var(--text-4)}
+.cell{border-bottom:1px solid var(--border);border-left:1px solid var(--border);padding:6px 5px;display:flex;flex-direction:column;gap:4px;min-height:58px;min-width:0;position:relative}
+.cell.tbd{background:repeating-linear-gradient(135deg,#FBFBFC 0 6px,#F6F7F9 6px 7px)}
+.cell.dim{opacity:.32}
+.item{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--ic,#999);border-radius:5px;padding:4px 6px 4px 6px;min-width:0;transition:border-color .12s,box-shadow .12s,transform .12s}
+.item:hover{box-shadow:0 2px 6px rgba(17,24,39,.08);transform:translateY(-1px)}
+.item .ic{font-size:11.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.item .it{font-size:10.5px;color:var(--text-3);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.35;word-break:break-all}
+.item .id{font-size:10px;color:var(--accent-2);font-weight:700;margin-right:3px}
+.item .tag{font-size:9.5px;font-weight:700;color:var(--text-3);background:var(--surface-3);border-radius:3px;padding:0 4px;margin-right:3px}
+.more{font-size:11px;font-weight:700;color:var(--accent-2);text-align:left;padding:2px 4px;border-radius:4px}
+.more:hover{background:var(--accent-soft)}
+.swim-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 18px;border-top:1px solid var(--border);font-size:11.5px;color:var(--text-3)}
+.tbd-key{display:inline-flex;align-items:center;gap:6px}
+.tbd-key i{width:16px;height:10px;border:1px solid var(--border-2);background:repeating-linear-gradient(135deg,#FBFBFC 0 3px,#E5E7EB 3px 4px)}
+
+/* ---------- quarter view ---------- */
+.qgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:12px}
+.qcard{border:1px solid var(--border);border-radius:var(--radius);padding:14px 14px 12px;background:var(--surface);text-align:left;display:flex;flex-direction:column;gap:10px;min-width:0;transition:border-color .12s,box-shadow .12s}
+.qcard:hover{border-color:var(--border-2);box-shadow:0 2px 8px rgba(17,24,39,.06)}
+.qcard.sel{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-ring)}
+.qcard.tbdc{background:repeating-linear-gradient(135deg,#FCFCFD 0 8px,#F7F8FA 8px 9px)}
+.qcard .qh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.qcard .qn{font-size:18px;font-weight:800;color:var(--accent)}
+.qcard .qm{font-size:11.5px;color:var(--text-3)}
+.qcard .qt{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.qcard .qt small{font-size:12px;font-weight:600;color:var(--text-3);margin-left:4px}
+.qcard .qs{font-size:11.5px;color:var(--text-3)}
+.stackbar{display:flex;height:8px;border-radius:4px;overflow:hidden;gap:2px;background:var(--surface-3)}
+.stackbar i{display:block;height:100%}
+.qinds{display:flex;flex-direction:column;gap:3px}
+.qind{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2)}
+.qind i{width:8px;height:8px;border-radius:50%;flex:none}
+.qind span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qind b{font-variant-numeric:tabular-nums}
+.qtop{border-top:1px solid var(--border);padding-top:8px;display:flex;flex-direction:column;gap:4px}
+.qtop .lbl{font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--text-4)}
+.qtop div.r{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-2)}
+.qtop div.r b{color:var(--text);font-weight:700}
+.qtop div.r em{font-style:normal;color:var(--accent-2);font-weight:700;font-size:11px;margin-right:4px}
+.qdetail{margin-top:16px}
+.month-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.month-col h3{margin:0 0 8px;font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:baseline}
+.month-col h3 span{font-size:12px;color:var(--text-3);font-weight:600}
+.stack{display:flex;flex-direction:column;gap:8px}
+
+/* ---------- event card ---------- */
+.ev{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 12px;position:relative;min-width:0;transition:border-color .12s,box-shadow .12s,transform .12s}
+.ev::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:var(--ic,#999)}
+.ev:hover{border-color:var(--border-2);box-shadow:0 3px 10px rgba(17,24,39,.07);transform:translateY(-1px)}
+.ev .r1{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.ev .co{font-size:13.5px;font-weight:800;min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ev .when{font-size:12px;font-weight:700;color:var(--accent-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.ev .when.u{color:var(--text-3);font-weight:600}
+.ev .ti{font-size:13px;font-weight:600;color:var(--text);margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ev .meta{font-size:11.5px;color:var(--text-3);margin-top:5px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ev .meta .sep{width:3px;height:3px;border-radius:50%;background:var(--border-2)}
+.ev .ds{font-size:11.5px;color:var(--text-3);margin-top:5px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.ev .opp{margin-top:7px;font-size:11.5px;color:var(--opp);background:var(--opp-bg);border-radius:4px;padding:3px 7px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.badge{display:inline-flex;align-items:center;height:18px;padding:0 6px;border-radius:4px;font-size:10.5px;font-weight:700;white-space:nowrap}
+.badge.ready{background:#E7F0EA;color:#2F6B45}
+.badge.watch{background:#F1F2F4;color:#4B5563}
+.badge.ext{background:#fff;color:var(--text-4);border:1px solid var(--border)}
+.ind-tag{display:inline-flex;align-items:center;gap:5px;font-weight:600;color:var(--text-2)}
+.ind-tag i{width:7px;height:7px;border-radius:50%}
+
+/* ---------- month view ---------- */
+.mstrip{display:grid;grid-template-columns:repeat(12,minmax(0,1fr)) minmax(0,1.25fr);gap:6px;margin-bottom:16px}
+.mbtn.tbdm{background:repeating-linear-gradient(135deg,#FCFCFD 0 6px,#F3F4F6 6px 7px);border-style:dashed;border-color:var(--border-2)}
+.mbtn.tbdm .mn{font-size:12px;white-space:nowrap}
+.mbtn.tbdm .mb i{background:#C9CED6}
+.mbtn.tbdm.sel{background:var(--accent-soft);border-style:solid;border-color:var(--accent)}
+.unsure-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;background:var(--surface-2);border:1px dashed var(--border-2);border-radius:8px;padding:10px 14px;margin-bottom:16px}
+.unsure-head b{font-size:14px;color:var(--accent)}
+.unsure-head span{font-size:12px;color:var(--text-3)}
+.mbtn{border:1px solid var(--border);border-radius:8px;padding:8px 6px 6px;text-align:center;background:var(--surface);display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;transition:border-color .12s}
+.mbtn:hover{border-color:var(--border-2)}
+.mbtn .mn{font-size:13px;font-weight:700}
+.mbtn .mc{font-size:11px;color:var(--text-3);font-variant-numeric:tabular-nums}
+.mbtn .mb{width:100%;height:26px;display:flex;align-items:flex-end;justify-content:center}
+.mbtn .mb i{display:block;width:60%;max-width:28px;background:#B7C4D6;border-radius:3px 3px 0 0;min-height:2px}
+.mbtn.sel{border-color:var(--accent);background:var(--accent-soft)}
+.mbtn.sel .mn{color:var(--accent)}
+.mbtn.sel .mb i{background:var(--accent)}
+.mbtn.next{border-style:dashed}
+.mlayout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:20px}
+.mside{display:flex;flex-direction:column;gap:14px;min-width:0}
+.mhero .big{font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.mhero .big small{font-size:14px;color:var(--text-3);font-weight:600;margin-left:4px}
+.mhero .lbl{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px}
+.mhero .s{font-size:12px;color:var(--text-3);margin-top:6px}
+.hbars{display:flex;flex-direction:column;gap:6px}
+.hbar{display:grid;grid-template-columns:84px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:12px;cursor:pointer;border-radius:4px}
+.hbar:hover .hl{color:var(--accent)}
+.hbar .hl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-2);display:flex;align-items:center;gap:6px}
+.hbar .hl i{width:8px;height:8px;border-radius:50%;flex:none}
+.hbar .ht{height:10px;background:var(--surface-3);border-radius:0 3px 3px 0;overflow:hidden}
+.hbar .ht i{display:block;height:100%;border-radius:0 3px 3px 0}
+.hbar .hv{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.side-box{border:1px solid var(--border);border-radius:8px;padding:12px}
+.side-box h4{margin:0 0 8px;font-size:12px;font-weight:700;color:var(--text-2)}
+.side-box .hint{font-size:11px;color:var(--text-3);margin:-4px 0 8px}
+.mini{display:flex;align-items:center;gap:8px;padding:5px 4px;border-radius:5px;font-size:12px;width:100%;text-align:left}
+.mini:hover{background:var(--surface-2)}
+.mini i{width:7px;height:7px;border-radius:50%;flex:none}
+.mini b{font-weight:700;white-space:nowrap}
+.mini span{color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
+.mini em{font-style:normal;font-size:11px;color:var(--accent-2);font-weight:700;white-space:nowrap}
+.evgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.section-t{font-size:12px;font-weight:700;color:var(--text-3);letter-spacing:.04em;margin:18px 0 8px;display:flex;align-items:center;gap:8px}
+.section-t:first-child{margin-top:0}
+.section-t::after{content:"";flex:1;height:1px;background:var(--border)}
+
+/* ---------- industry view ---------- */
+.ilayout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:20px}
+.ilist{display:flex;flex-direction:column;gap:4px}
+.ibtn{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:7px;border:1px solid transparent;text-align:left;width:100%}
+.ibtn:hover{background:var(--surface-2)}
+.ibtn.sel{background:var(--accent-soft);border-color:#C9D6E8}
+.ibtn i{width:10px;height:10px;border-radius:50%;flex:none}
+.ibtn span{flex:1;font-weight:600;font-size:13px}
+.ibtn b{font-variant-numeric:tabular-nums;font-size:12px;color:var(--text-3)}
+.ibtn.sel b{color:var(--accent)}
+.ihead{display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.ihead .nm{font-size:22px;font-weight:800;display:flex;align-items:center;gap:10px}
+.ihead .nm i{width:12px;height:12px;border-radius:50%}
+.istat{font-size:12px;color:var(--text-3)}
+.istat b{display:block;font-size:18px;color:var(--text);font-weight:800}
+.spark{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;align-items:end;height:44px;width:min(360px,100%)}
+.spark i{display:block;border-radius:2px 2px 0 0;min-height:2px}
+.spark-l{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;width:min(360px,100%);font-size:9.5px;color:var(--text-4);text-align:center;margin-top:3px}
+.tl{position:relative;padding-left:0}
+.tl-row{display:grid;grid-template-columns:76px minmax(0,1fr);gap:14px;position:relative}
+.tl-m{position:relative;padding:14px 0 10px;text-align:right}
+.tl-m b{font-size:15px;font-weight:800}
+.tl-m span{display:block;font-size:11px;color:var(--text-3)}
+.tl-body{border-left:2px solid var(--border);padding:12px 0 12px 18px;position:relative;min-width:0}
+.tl-body::before{content:"";position:absolute;left:-6px;top:20px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--ic,#9CA3AF)}
+.tl-row.empty .tl-body::before{border-color:var(--border-2);width:6px;height:6px;left:-4px;top:22px}
+.tl-row.empty .tl-m b{color:var(--text-4)}
+.tl-row.empty .tl-body{padding-top:16px;padding-bottom:6px}
+.tl-empty{font-size:12px;color:var(--text-4)}
+.tl-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.tl-row.tbd .tl-body{border-left-style:dashed}
+
+/* ---------- heatmap ---------- */
+.heat{width:100%;border-collapse:separate;border-spacing:3px;table-layout:fixed}
+.heat th{font-size:11.5px;font-weight:700;color:var(--text-3);padding:4px 6px;text-align:center}
+.heat th.rl{text-align:left;width:108px}
+.heat th.rl span{display:inline-flex;align-items:center;gap:6px;color:var(--text-2);white-space:nowrap}
+.heat th.rl i{width:8px;height:8px;border-radius:50%}
+.heat td{height:34px;border-radius:5px;text-align:center;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;cursor:pointer;transition:box-shadow .12s,transform .12s;position:relative}
+.heat td:hover{box-shadow:0 0 0 2px var(--accent);z-index:1}
+.heat td.z{color:var(--text-4);font-weight:500;cursor:default}
+.heat td.z:hover{box-shadow:none}
+.heat td.sel{box-shadow:0 0 0 2px var(--accent),0 0 0 4px var(--accent-ring)}
+.heat td.tot,.heat th.tot{background:none;color:var(--text-3);font-weight:600;font-size:12px;cursor:default}
+.heat td.tot:hover{box-shadow:none}
+.heat td.tbdcol{outline:1px dashed var(--border-2);outline-offset:-1px}
+.heat-scale{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-3)}
+.heat-scale i{width:18px;height:10px;border-radius:2px;display:inline-block}
+
+/* ---------- month volume chart ---------- */
+.colchart{margin-top:16px;display:grid;grid-template-columns:28px minmax(0,1fr);gap:6px}
+.yaxis{display:flex;flex-direction:column;justify-content:space-between;height:220px;font-size:10.5px;color:var(--text-4);text-align:right;padding-bottom:0}
+.cols{position:relative;height:220px;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;align-items:end;border-bottom:1px solid var(--border-2)}
+.cols .gl{position:absolute;left:0;right:0;border-top:1px dashed #EEF0F3;pointer-events:none}
+.col{position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;cursor:pointer;border-radius:4px}
+.col:hover{background:rgba(30,58,95,.04)}
+.col.sel{background:var(--accent-soft)}
+.col .bar{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:min(70%,34px);display:flex;flex-direction:column-reverse;gap:2px}
+.col .bar i{display:block;width:100%}
+.col .bar i:last-child{border-radius:4px 4px 0 0}
+.col .val{position:absolute;left:0;right:0;text-align:center;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.xlabels{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;margin-left:34px;margin-top:6px}
+.xlabels span{text-align:center;font-size:11.5px;color:var(--text-3)}
+.chart-note{font-size:11.5px;color:var(--text-3);margin-top:12px;display:flex;gap:14px;flex-wrap:wrap}
+.chart-note b{color:var(--text)}
+
+/* ---------- tooltip ---------- */
+.tip{position:fixed;z-index:80;pointer-events:none;background:#111827;color:#fff;border-radius:8px;padding:9px 11px;font-size:12px;line-height:1.45;box-shadow:var(--shadow-lg);max-width:260px;opacity:0;transition:opacity .1s}
+.tip.on{opacity:1}
+.tip .tt{font-weight:700;margin-bottom:4px}
+.tip .tr{display:flex;align-items:center;gap:6px;justify-content:space-between}
+.tip .tr span{display:inline-flex;align-items:center;gap:6px;color:#D1D5DB}
+.tip .tr i{width:7px;height:7px;border-radius:50%;display:inline-block}
+
+/* ---------- table ---------- */
+.tbl-wrap{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;min-width:1100px}
+.tbl th{position:sticky;top:0;background:var(--surface-2);font-size:12px;font-weight:700;color:var(--text-3);text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;user-select:none}
+.tbl th.s{cursor:pointer}
+.tbl th.s:hover{color:var(--text);background:#FFF6CC}
+.tbl th .ar{display:inline-block;margin-left:5px;color:var(--border-2);font-size:10px}
+.tbl th.on{color:var(--accent);background:#FFF3BF}
+.tbl th.on .ar{color:var(--accent);font-size:11px}
+.tbl td{padding:10px 12px;border-bottom:1px solid #F0F1F3;font-size:12.5px;vertical-align:top;color:var(--text-2)}
+.tbl tr.row{cursor:pointer;transition:background .1s}
+.tbl tr.row:hover{background:#F8FAFC}
+.tbl .c-when{font-weight:700;color:var(--text);white-space:nowrap;font-variant-numeric:tabular-nums}
+.tbl .c-when.u{color:var(--text-3);font-weight:600}
+.tbl .c-co{font-weight:700;color:var(--text);min-width:120px}
+.tbl .c-ti{color:var(--text);min-width:220px}
+.tbl .c-opp{color:var(--text-3);min-width:220px;max-width:360px}
+.tbl .clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tbl .q{font-weight:700;color:var(--accent-2)}
+.tbl-foot{padding:10px 18px;font-size:12px;color:var(--text-3);border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.btn-more{border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--text-2);background:var(--surface)}
+.btn-more:hover{border-color:var(--border-2)}
+
+/* ---------- list modal ---------- */
+.btn-list{display:inline-flex;align-items:center;gap:12px;padding:11px 12px 11px 16px;border-radius:12px;background:#FFD21F;color:#1A1A1A;border:1px solid #E6B800;box-shadow:0 2px 0 #D9AC00,0 6px 16px rgba(230,184,0,.28);white-space:nowrap;transition:transform .12s,box-shadow .12s,background .12s}
+.btn-list:hover{background:#FFDB4D;transform:translateY(-1px);box-shadow:0 3px 0 #D9AC00,0 10px 22px rgba(230,184,0,.36)}
+.btn-list:active{transform:translateY(1px);box-shadow:0 1px 0 #D9AC00}
+.btn-list .bl-text{display:flex;flex-direction:column;align-items:flex-start;font-size:15px;font-weight:800;letter-spacing:-.01em;line-height:1.25}
+.btn-list .bl-text small{font-size:11.5px;font-weight:600;color:#5C4A00}
+.btn-list .bl-click{display:inline-flex;align-items:center;gap:5px;background:#1A1A1A;color:#FFD21F;font-size:11px;font-weight:800;letter-spacing:.08em;border-radius:8px;padding:7px 9px 7px 10px}
+.btn-list .bl-click svg{animation:nudge 1.4s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
+@media (prefers-reduced-motion:reduce){.btn-list .bl-click svg{animation:none}}
+/* sort bar */
+.sortbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 18px;background:#FFFBEA;border-bottom:1px solid #F3E3A6;flex:none}
+.sortbar .sl{font-size:12.5px;font-weight:800;color:#5C4A00;display:inline-flex;align-items:center;gap:6px;margin-right:2px}
+.sortbtn{height:30px;padding:0 12px;border-radius:15px;border:1px solid #E5D48A;background:#fff;font-size:12.5px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:border-color .12s,background .12s}
+.sortbtn:hover{border-color:#C9A800;background:#FFF6CC}
+.sortbtn .dir{font-size:10px;color:var(--text-4)}
+.sortbtn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.sortbtn.on .dir{color:#FFD21F;font-size:11px;font-weight:700}
+.sortbar .sh{font-size:11.5px;color:#7A6500;margin-left:auto}
+.modal-bg{position:fixed;inset:0;background:rgba(17,24,39,.42);z-index:48;opacity:0;pointer-events:none;transition:opacity .18s}
+.modal-bg.on{opacity:1;pointer-events:auto}
+.modal{position:fixed;left:50%;top:50%;width:min(1360px,94vw);max-height:88vh;transform:translate(-50%,-48%);background:var(--surface);border-radius:12px;box-shadow:var(--shadow-lg);z-index:50;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s}
+.modal.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
+.modal .tbl-wrap{overflow:auto;flex:1;min-height:0}
+.modal .card-h{flex:none}
+
+/* ---------- empty ---------- */
+.empty-state{padding:48px 20px;text-align:center;color:var(--text-3)}
+.empty-state b{display:block;color:var(--text-2);font-size:14px;margin-bottom:4px}
+.empty-state button{margin-top:12px}
+
+/* ---------- side panel ---------- */
+.overlay{position:fixed;inset:0;background:rgba(17,24,39,.28);z-index:60;opacity:0;pointer-events:none;transition:opacity .18s}
+.overlay.on{opacity:1;pointer-events:auto}
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--surface);z-index:70;box-shadow:var(--shadow-lg);transform:translateX(102%);transition:transform .22s ease;display:flex;flex-direction:column}
+.panel.on{transform:none}
+.p-head{padding:18px 22px 16px;border-bottom:1px solid var(--border);position:relative}
+.p-close{position:absolute;right:14px;top:14px;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-3)}
+.p-close:hover{background:var(--surface-3);color:var(--text)}
+.p-back{font-size:12px;font-weight:600;color:var(--accent-2);margin-bottom:8px;display:inline-flex;align-items:center;gap:4px}
+.p-back:hover{text-decoration:underline}
+.p-tags{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px;padding-right:40px}
+.p-co{font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.25;padding-right:40px}
+.p-title{font-size:15px;font-weight:600;color:var(--text-2);margin-top:4px}
+.p-when{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.p-when div{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;min-width:0}
+.p-when small{display:block;font-size:10.5px;color:var(--text-3);font-weight:700;letter-spacing:.04em}
+.p-when b{font-size:14px;font-variant-numeric:tabular-nums}
+.p-body{flex:1;overflow-y:auto;padding:18px 22px 28px}
+.opp-box{border:1px solid var(--opp-border);background:var(--opp-bg);border-radius:10px;padding:14px 16px;margin-bottom:18px}
+.opp-box .oh{font-size:11.5px;font-weight:800;letter-spacing:.1em;color:var(--opp);margin-bottom:10px}
+.opp-box .og{margin-top:10px}
+.opp-box .og:first-of-type{margin-top:0}
+.opp-box .ol{font-size:11px;font-weight:700;color:#9A6B12;margin-bottom:3px}
+.opp-box .ov{font-size:13px;color:#3D2E10;white-space:pre-line}
+.opp-box ul{margin:0;padding-left:16px}
+.opp-box li{font-size:13px;color:#3D2E10;margin:2px 0}
+.opp-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.opp-meta span{font-size:11.5px;background:rgba(255,255,255,.75);border:1px solid var(--opp-border);border-radius:5px;padding:3px 8px;color:#5B4313}
+.opp-meta b{font-weight:700}
+.ag-box{background:var(--accent);color:#fff;border-radius:12px;padding:16px 18px 16px;margin-bottom:14px;position:relative;overflow:hidden}
+.ag-box::after{content:"";position:absolute;right:-28px;top:-28px;width:110px;height:110px;border-radius:50%;background:rgba(255,210,31,.16)}
+.ag-box .ag-l{font-size:11px;font-weight:800;letter-spacing:.1em;color:#FFD21F;margin-bottom:6px}
+.ag-box .ag-n{font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.25;overflow-wrap:anywhere}
+.ag-box .ag-t{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.ag-box .ag-t span{font-size:12px;font-weight:700;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);border-radius:6px;padding:3px 9px}
+.ag-box .ag-none{font-size:11.5px;color:rgba(255,255,255,.6);margin-top:8px}
+.ag-box.empty{background:var(--surface-2);color:var(--text-3);border:1px dashed var(--border-2)}
+.ag-box.empty::after{display:none}
+.ag-box.empty .ag-l{color:var(--text-3)}
+.ag-box.empty .ag-n{font-size:14px;font-weight:600;color:var(--text-3)}
+.fields{display:grid;grid-template-columns:96px minmax(0,1fr);gap:9px 14px;font-size:13px}
+.fields dt{color:var(--text-3);font-weight:600;font-size:12px;padding-top:1px}
+.fields dd{margin:0;color:var(--text);min-width:0;overflow-wrap:anywhere}
+.fields ul{margin:0;padding-left:16px}
+.fields li{margin:2px 0}
+.fields a{color:var(--accent-2);text-decoration:none;border-bottom:1px solid #C9D6E8}
+.fields a:hover{border-bottom-color:var(--accent-2)}
+.p-sec{font-size:11.5px;font-weight:800;letter-spacing:.08em;color:var(--text-3);margin:20px 0 10px}
+.note{background:#F5F7FA;border-left:3px solid #94A3B8;border-radius:0 6px 6px 0;padding:8px 12px;font-size:12.5px;color:var(--text-2)}
+.related{display:flex;flex-direction:column;gap:4px}
+
+@media (max-width:1360px){
+}
+@media (max-width:1180px){
+  .grid-2,.grid-2b{grid-template-columns:minmax(0,1fr)}
+  .mlayout,.ilayout{grid-template-columns:minmax(0,1fr)}
+  .ilist{flex-direction:row;flex-wrap:wrap}
+  .ibtn{width:auto}
+  .month-cols{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:760px){
+  .wrap{padding:0 16px}
+  .filters .wrap{grid-template-columns:minmax(0,1fr)}
+  .f-label{padding-top:0}
+  .mstrip{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .search{flex-basis:100%;margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="wrap">
+    <div>
+      <h1>2027 주요 이슈 캘린더</h1>
+    </div>
+    <div class="header-right">
+      <button class="btn-list" data-action="open-list">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+        <span class="bl-text">전체 이슈 리스트 확인하기<small><b class="num" id="listBtnCount"></b>건 · 한 번에 모아 보기</small></span>
+        <span class="bl-click">CLICK <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="ctrl">
+  <div class="wrap">
+    <span class="ctrl-label">VIEW BY</span>
+    <div class="seg" id="viewSeg">
+      <button data-view="quarter">분기별</button>
+      <button data-view="month" class="on">월별</button>
+    </div>
+    <span class="result-count" id="resultCount"></span>
+    <div class="search" id="searchBox">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="search" type="search" placeholder="기업명 · 이슈명 검색 (예: 넥슨, 창립)" autocomplete="off">
+      <button class="clear" id="searchClear" aria-label="검색어 지우기">✕</button>
+    </div>
+    <button class="btn-reset" id="resetBtn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>필터 초기화</button>
+    <div class="active-row" id="activeRow"></div>
+  </div>
+</div>
+
+<section class="filters">
+  <div class="wrap">
+    <div class="f-label">구분</div><div class="chips" id="fScope"></div>
+  </div>
+</section>
+
+<main class="wrap">
+
+  <section class="card" id="mainCard">
+    <div class="card-h">
+      <div><h2 id="mainTitle"></h2><div class="sub" id="mainSub"></div></div>
+      <div class="legend" id="mainLegend"></div>
+    </div>
+    <div id="mainBody"></div>
+  </section>
+
+</main>
+
+<div class="modal-bg" id="modalBg"></div>
+<div class="modal" id="listModal" role="dialog" aria-label="전체 이슈 리스트" aria-hidden="true">
+  <div class="card-h">
+    <div><h2>전체 이슈 리스트 <span class="result-count" id="tableCount" style="margin-left:6px"></span></h2><div class="sub">화면의 필터·검색과 관계없이 항상 전체 이슈를 보여줍니다 · 행을 누르면 상세 정보가 열립니다</div></div>
+    <button class="p-close" style="position:static" data-action="close-list" aria-label="닫기">✕</button>
+  </div>
+  <div class="sortbar" id="sortBar"></div>
+  <div class="tbl-wrap"><table class="tbl" id="tbl"></table></div>
+  <div class="tbl-foot" id="tblFoot"></div>
+</div>
+<div class="overlay" id="overlay"></div>
+<aside class="panel" id="panel" aria-hidden="true">
+  <div class="p-head" id="pHead"></div>
+  <div class="p-body" id="pBody"></div>
+</aside>
+<div class="tip" id="tip"></div>
+
+<script>
+/* =========================================================================
+   CONFIG — 업종 색상(전 화면 공통) · 이슈 유형 · 기간
+   ========================================================================= */
+const INDUSTRIES = [
+  { key: "금융",         color: "#2e6bc4" },
+  { key: "IT",           color: "#1d9a78" },
+  { key: "모빌리티",     color: "#6656b8" },
+  { key: "게임",         color: "#d0683a" },
+  { key: "엔터테인먼트", color: "#1f8fbf" },
+  { key: "뷰티·패션",    color: "#c2577f" },
+  { key: "유통",         color: "#5f8a2a" },
+  { key: "관광·항공",    color: "#a6463f" },
+  { key: "식음료",       color: "#c99512" },
+  { key: "행사·공공",    color: "#3e4a5c" },
+  { key: "기타",         color: "#8a8f98" },
+];
+const ISSUE_TYPES = [
+  "신제품 / 서비스 출시", "게임 / 콘텐츠 출시", "창립기념 / Anniversary", "대형 행사 / 이벤트", "스포츠 / 문화",
+  "브랜드 캠페인", "사업 확장 / 신규 진출", "기업 주요 변화", "시즌 마케팅", "기타",
+];
+const QUARTERS = ["Q1", "Q2", "Q3", "Q4"];
+const Q_MONTHS = { Q1: [1, 2, 3], Q2: [4, 5, 6], Q3: [7, 8, 9], Q4: [10, 11, 12] };
+const IND_COLOR = Object.fromEntries(INDUSTRIES.map(i => [i.key, i.color]));
+const IND_ORDER = Object.fromEntries(INDUSTRIES.map((i, n) => [i.key, n]));
+const TYPE_ORDER = Object.fromEntries(ISSUE_TYPES.map((t, n) => [t, n]));
+const HEAT_RAMP = ["#F3F6FA", "#DCE5F0", "#BFCEE2", "#97AECB", "#6F8DB3", "#4A6D99", "#2C4F7C"];
+
+/* =========================================================================
+   NORMALIZE — 파생 필드 (원본 필드는 변경하지 않음)
+   ========================================================================= */
+const pad = n => String(n).padStart(2, "0");
+const halfLabel = h => (h === "H1" ? "상반기" : "하반기");
+
+function derive(e) {
+  const t = e.periodType;
+  e._hasMonth = !!e.month && ["date", "month", "range"].includes(t);
+  e._q = e.quarter || null;
+  e._half = e.half || null;
+  // short label (카드·리스트용)
+  let short, bucket = null;
+  if (t === "date") short = `${pad(e.month)}.${pad(e.day)}`;
+  else if (t === "month") short = `${e.month}월`;
+  else if (t === "range") {
+    if (e.carryOver) short = `연초 진행${e.endMonth ? ` ~${e.endMonth}월` : ""}`;
+    else {
+      const a = e.day ? `${pad(e.month)}.${pad(e.day)}` : `${e.month}월`;
+      const b = e.endMonth ? (e.endDay ? `${pad(e.endMonth)}.${pad(e.endDay)}` : `${e.endMonth}월`) : (e.endLabel || "");
+      short = b && b !== a ? `${a}~${b}` : `${a}~`;
+    }
+  } else if (t === "quarter") { short = `${e.quarter.slice(1)}분기`; bucket = `${e.quarter.slice(1)}분기 (월 미정)`; }
+  else if (t === "half") { short = halfLabel(e.half); bucket = `${halfLabel(e.half)} (월 미정)`; }
+  else if (t === "season") { short = e.season; bucket = `특정 시즌 · ${e.season}`; }
+  else if (t === "year") { short = "2027년 중"; bucket = "연중 (월 미정)"; }
+  else if (t === "tbd") { short = "일정 미정"; bucket = "일정 미정"; }
+  else if (t === "recurring") { short = e.recurLabel || "정례 행사"; bucket = "정례 행사 · 2027 일정 미발표"; }
+  else if (t === "pre") { short = "2026년"; bucket = "2026년 선행 이슈"; }
+  e._short = short;
+  e._bucket = bucket;
+  e._tag = t === "quarter" ? e.quarter : t === "half" ? halfLabel(e.half) : t === "season" ? e.season
+         : t === "year" ? "연중" : t === "tbd" ? "미정" : t === "recurring" ? "정례" : t === "pre" ? "2026" : "";
+  // 정렬 키: 월 확정 → 분기 → 반기 → 시즌 → 연중 → 미정
+  const base = { quarter: 1300, half: 1320, season: 1330, year: 1340, recurring: 1345, tbd: 1350 };
+  if (t === "pre") e._sort = 0;
+  else if (e._hasMonth) e._sort = e.month * 100 + (e.carryOver ? 0 : (e.day || 1));
+  else e._sort = base[t] + (e.quarter ? +e.quarter[1] : 0) + (e.half === "H2" ? 5 : 0);
+  // 행사(scope="행사")는 주관사가 아니라 행사명이 메인: "행사명 — 부가 설명" → 행사명 / 주관 / 부가 설명
+  if (e.scope === "행사") {
+    const [name, ...rest] = e.title.split(" — ");
+    e._main = name.trim(); e._sub = `주관 · ${e.company}`; e._extra = rest.join(" — ").trim();
+  } else { e._main = e.company; e._sub = e.title; e._extra = ""; }
+  e._co = e.company.replace(/ \((뚜레쥬르|VIPS)\)$/, "");
+  e._search = [e.company, e.title, e.content, e.issueType, e.anniversary, e.industry, e.description, e.agency, e.sourceNote].filter(Boolean).join(" ").toLowerCase();
+  e._ic = IND_COLOR[e.industry] || "#8a8f98";
+}
+events.forEach(derive);
+const BY_ID = new Map(events.map(e => [e.id, e]));
+
+/* =========================================================================
+   STATE & FILTER
+   ========================================================================= */
+const state = {
+  view: "month",
+  prevPeriod: "all",
+  scope: "all",               // all | 기업 | 행사
+  period: "m1",               // all | H1 | H2 | Q1..Q4 | m1..m12 | unsure
+  industries: new Set(),
+  types: new Set(),
+  q: "",
+  sort: { key: "when", dir: 1 },
+  tableLimit: 60,
+  industryFocus: null,
+};
+
+function periodMatch(e, p) {
+  if (p === "all") return true;
+  if (p === "unsure") return !e._hasMonth;   // 월 미확정
+  if (p === "noq") return !e._q;             // 분기 미확정
+  if (p === "H1" || p === "H2") return e._half === p;
+  if (p[0] === "Q") return e._q === p;
+  if (p[0] === "m") return e._hasMonth && e.month === +p.slice(1);
+  return true;
+}
+function matches(e, skip = "") {
+  if (skip !== "scope" && state.scope !== "all" && e.scope !== state.scope) return false;
+  if (skip !== "period" && !periodMatch(e, state.period)) return false;
+  if (skip !== "industry" && state.industries.size && !state.industries.has(e.industry)) return false;
+  if (skip !== "type" && state.types.size && !state.types.has(e.issueType)) return false;
+  if (state.q && !e._search.includes(state.q)) return false;
+  return true;
+}
+let filtered = [];
+const filterBy = skip => events.filter(e => matches(e, skip));
+
+const PERIOD_LABEL = p => p === "all" ? "전체" : p === "unsure" ? "월 미확정" : p === "noq" ? "분기 미확정" : p === "H1" ? "상반기" : p === "H2" ? "하반기"
+  : p[0] === "Q" ? p : `${p.slice(1)}월`;
+
+/* =========================================================================
+   HELPERS
+   ========================================================================= */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const countBy = (arr, fn) => { const m = new Map(); arr.forEach(x => { const k = fn(x); if (k == null) return; m.set(k, (m.get(k) || 0) + 1); }); return m; };
+const uniq = arr => new Set(arr).size;
+const bySort = (a, b) => a._sort - b._sort || (IND_ORDER[a.industry] - IND_ORDER[b.industry]) || a._main.localeCompare(b._main, "ko");
+const indTag = ind => `<span class="ind-tag"><i style="background:${IND_COLOR[ind]}"></i>${esc(ind)}</span>`;
+const firstLine = s => (s || "").split("\n").map(x => x.replace(/^•\s*/, "").trim()).filter(Boolean)[0] || "";
+function priority(e) { // 대표 이슈 선정: LUUX 제안 포인트 보유 > 일자 확정 > 기타
+  return (e.opportunity ? 0 : 1) * 10 + (e.periodType === "date" ? 0 : e._hasMonth ? 1 : 2);
+}
+function evCard(e, opts = {}) {
+  const u = !e._hasMonth;
+  const desc = e._extra || (opts.noDesc ? "" : firstLine(e.description));
+  const opp = e.opportunity || firstLine(e.linkPoint);
+  return `<button class="ev" data-id="${e.id}" style="--ic:${e._ic}">
+    <div class="r1"><span class="co">${esc(e._main)}</span><span class="when${u ? " u" : ""}">${esc(e._short)}</span></div>
+    <div class="ti"${e.scope === "행사" ? ' style="font-weight:500;color:var(--text-2)"' : ""}>${esc(e._sub)}</div>
+    <div class="meta">${indTag(e.industry)}<span class="sep"></span><span>${esc(e.issueType)}</span></div>
+    ${desc ? `<div class="ds">${esc(desc)}</div>` : ""}
+    ${opp && !opts.noOpp ? `<div class="opp">💡 ${esc(opp)}</div>` : ""}
+  </button>`;
+}
+const emptyHTML = (msg = "조건에 해당하는 이슈가 없습니다.") =>
+  `<div class="empty-state"><b>${msg}</b>필터 조건을 변경하거나 초기화해 보세요.<br><button class="btn-reset" data-action="reset">필터 초기화</button></div>`;
+
+/* =========================================================================
+   FILTER BAR
+   ========================================================================= */
+function renderFilterChips() {
+  const sb = events, sc = countBy(sb, e => e.scope);   // 구분 탭의 건수는 항상 전체 기준으로 고정
+  $("fScope").innerHTML = [["all", "전체 (행사 포함)", sb.length], ["기업", "기업 이슈만 (행사 제외 ver.)", sc.get("기업") || 0], ["행사", "행사만", sc.get("행사") || 0]]
+    .map(([k, l, c]) => `<button class="chip${state.scope === k ? " on" : ""}${c ? "" : " zero"}" data-scope="${k}">${l} <span class="c">${c}</span></button>`).join("");
+}
+
+function renderActive() {
+  const t = [];
+  if (state.scope !== "all") t.push(["scope", "", state.scope === "기업" ? "구분: 기업 이슈만 (행사 제외)" : "구분: 행사만"]);
+  if (state.period !== "all") t.push(["period", "", `기간: ${PERIOD_LABEL(state.period)}`]);
+  state.industries.forEach(i => t.push(["ind", i, `업종: ${i}`]));
+  state.types.forEach(i => t.push(["type", i, `유형: ${i}`]));
+  if (state.q) t.push(["q", "", `검색: "${state.q}"`]);
+  $("activeRow").innerHTML = t.length ? `<span class="ctrl-label">적용 중</span>` + t.map(([k, v, l]) =>
+    `<span class="token">${esc(l)}<button data-untoken="${k}" data-val="${esc(v)}" aria-label="해제">✕</button></span>`).join("") : "";
+  $("resetBtn").disabled = !t.length;
+  $("resultCount").innerHTML = `<b class="num">${filtered.length}</b> / ${events.length}건`;
+}
+
+/* =========================================================================
+   KPI
+   ========================================================================= */
+function topOf(map, order) {
+  let best = null, bv = -1;
+  for (const k of order) { const v = map.get(k) || 0; if (v > bv) { bv = v; best = k; } }
+  return bv > 0 ? [best, bv] : [null, 0];
+}
+function renderKPIs() {
+  const f = filtered;
+  const qMap = countBy(f, e => e._q), mMap = countBy(f.filter(e => e._hasMonth), e => e.month), iMap = countBy(f, e => e.industry);
+  const [tq, tqv] = topOf(qMap, QUARTERS);
+  const [tm, tmv] = topOf(mMap, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+  const [ti, tiv] = topOf(iMap, INDUSTRIES.map(i => i.key));
+  const fixed = f.filter(e => e._hasMonth).length;
+  const withOpp = f.filter(e => e.opportunity).length, withAg = f.filter(e => e.agency).length;
+  const K = [
+    ["전체 이슈 수", f.length, "건", `제안 포인트 보유 ${withOpp} · 대행사 확인 ${withAg}`, true],
+    ["포함 기업 수", uniq(f.map(e => e._co)), "개", `행사·주관사 행 ${f.filter(e => e.scope === "행사").length}건 포함`],
+    ["포함 업종 수", uniq(f.map(e => e.industry)), `/ ${INDUSTRIES.length}`, `전체 ${INDUSTRIES.length}개 업종 중`],
+    ["이슈 최다 분기", tq || "–", "", tq ? `${tqv}건 · ${Q_MONTHS[tq][0]}~${Q_MONTHS[tq][2]}월` : "분기 확정 이슈 없음"],
+    ["이슈 최다 월", tm ? `${tm}월` : "–", "", tm ? `${tmv}건 · 월 확정 이슈 기준` : "월 확정 이슈 없음"],
+    ["이슈 최다 업종", ti || "–", "", ti ? `${tiv}건 · 비중 ${Math.round(tiv / f.length * 100)}%` : ""],
+    ["일정 확정률", f.length ? Math.round(fixed / f.length * 100) : 0, "%", "월 단위 이상 확정 비율"],
+  ];
+  $("kpis").innerHTML = K.map(([k, v, u, s, p]) =>
+    `<div class="kpi${p ? " primary" : ""}"><div class="k">${k}</div><div class="v num"${String(v).length > 4 ? ' style="font-size:17px;padding:6px 0 4px;letter-spacing:-.03em"' : ""}>${esc(v)}${u ? `<small>${u}</small>` : ""}</div><div class="s">${esc(s)}</div></div>`).join("");
+}
+
+/* =========================================================================
+   MAIN VIEW — 연간 Swimlane
+   ========================================================================= */
+const MAX_IN_CELL = 3;
+function laneList() {
+  return state.industries.size ? INDUSTRIES.filter(i => state.industries.has(i.key)) : INDUSTRIES;
+}
+function periodCols() { // 기간 필터에 해당하는 월 (강조용)
+  const p = state.period;
+  if (p === "all") return null;
+  if (p === "H1") return [1, 2, 3, 4, 5, 6, "u"];
+  if (p === "H2") return [7, 8, 9, 10, 11, 12, "u"];
+  if (p[0] === "Q") return [...Q_MONTHS[p], "u"];
+  if (p[0] === "m") return [+p.slice(1)];
+  if (p === "unsure") return ["u"];
+}
+function itemHTML(e, inTbd) {
+  const d = e.periodType === "date" ? `<span class="id">${e.day}일</span>` : "";
+  const tag = inTbd ? `<span class="tag">${esc(e._tag)}</span>` : "";
+  return `<button class="item" data-id="${e.id}" style="--ic:${e._ic}" data-tip="ev"><span class="ic">${esc(e._main)}</span><span class="it">${tag}${d}${esc(e._sub)}</span></button>`;
+}
+function renderAnnual() {
+  $("mainTitle").textContent = "연간 View · 업종 × 월 Swimlane Timeline";
+  $("mainSub").textContent = "이벤트 클릭 → 상세 · 월 헤더 클릭 → 월 필터 · 업종명 클릭 → 업종 필터 · 우측 빗금 열 = 월이 확정되지 않은 이슈 (임의 배정 없음)";
+  $("mainLegend").innerHTML = "";
+  const f = filtered, lanes = laneList(), sel = periodCols();
+  const monthCnt = countBy(f.filter(e => e._hasMonth), e => e.month);
+  const uCnt = f.filter(e => !e._hasMonth).length;
+  const grid = new Map(); // `${ind}|${m}` → []
+  f.forEach(e => { const k = `${e.industry}|${e._hasMonth ? e.month : "u"}`; (grid.get(k) || grid.set(k, []).get(k)).push(e); });
+  grid.forEach(arr => arr.sort((a, b) => priority(a) - priority(b) || bySort(a, b)));
+  const maxCell = Math.max(1, ...[...grid.values()].map(a => a.length));
+  let h = `<div class="swim-scroll"><div class="swim">`;
+  // quarter band
+  h += `<div class="qband" style="background:var(--surface)"></div>`;
+  QUARTERS.forEach((q, i) => h += `<div class="qband${i % 2 ? " q-odd" : ""}" style="grid-column:span 3">${q} · ${["1~3월", "4~6월", "7~9월", "10~12월"][i]}</div>`);
+  h += `<div class="qband tbd">월 미확정</div>`;
+  // month header
+  h += `<div class="corner">업종 \\ 월</div>`;
+  for (let m = 1; m <= 12; m++) {
+    const s = state.period === `m${m}`;
+    h += `<div class="mh${s ? " sel" : ""}" data-period-set="m${m}"><div class="mn">${m}월</div><div class="mc"><b class="num">${monthCnt.get(m) || 0}</b>건</div></div>`;
+  }
+  h += `<div class="mh${state.period === "unsure" ? " sel" : ""}" data-period-set="unsure"><div class="mn">월 미확정</div><div class="mc"><b class="num">${uCnt}</b>건</div></div>`;
+  // lanes
+  lanes.forEach(L => {
+    const total = f.filter(e => e.industry === L.key).length;
+    h += `<div class="lane${total ? "" : " empty"}" data-ind-toggle="${L.key}"><div class="ln"><i style="background:${L.color}"></i>${L.key}</div><div class="lc num">${total}건</div></div>`;
+    [...Array.from({ length: 12 }, (_, i) => i + 1), "u"].forEach(m => {
+      const arr = grid.get(`${L.key}|${m}`) || [];
+      const dim = sel && !sel.includes(m);
+      const a = arr.length ? 0.03 + 0.11 * (arr.length / maxCell) : 0;
+      const bg = m === "u" ? "" : arr.length ? `background:rgba(30,58,95,${a.toFixed(3)})` : "";
+      h += `<div class="cell${m === "u" ? " tbd" : ""}${dim ? " dim" : ""}" style="${bg}">`;
+      const cap = m === "u" ? MAX_IN_CELL - 1 : MAX_IN_CELL;
+      arr.slice(0, cap).forEach(e => h += itemHTML(e, m === "u"));
+      if (arr.length > cap) h += `<button class="more" data-cell="${L.key}|${m}">+ ${arr.length - cap}개 더보기</button>`;
+      h += `</div>`;
+    });
+  });
+  h += `</div></div>`;
+  h += `<div class="swim-foot"><span>셀 배경 농도 = 해당 업종·월의 이슈 밀도 · 각 셀은 제안 포인트 보유 → 일자 확정 순으로 최대 ${MAX_IN_CELL}건 표시</span><span class="tbd-key"><i></i>월 미확정 열: 태그(Q1·상반기·연중·미정 등)로 원본 시기 표기</span></div>`;
+  $("mainBody").innerHTML = f.length ? h : emptyHTML();
+  cellGroups = grid;
+}
+let cellGroups = new Map();
+
+/* =========================================================================
+   MAIN VIEW — 분기별
+   ========================================================================= */
+let quarterFocus = null;
+// 일정 미확정 이슈를 원본 시기 표기(상반기·하반기·연중 등)별로 묶어서 보여줌
+function unsureGroups(arr) {
+  const groups = new Map();
+  arr.slice().sort(bySort).forEach(e => { const k = e._bucket || "기타"; (groups.get(k) || groups.set(k, []).get(k)).push(e); });
+  return [...groups].map(([k, a]) =>
+    `<div class="section-t">${esc(k)} · ${a.length}건</div><div class="evgrid">${a.map(e => evCard(e)).join("")}</div>`).join("");
+}
+function renderQuarter() {
+  $("mainTitle").textContent = "분기별 View";
+  $("mainSub").textContent = "분기 카드 클릭 → 해당 분기로 전체 필터 적용 · 다시 클릭하면 해제";
+  $("mainLegend").innerHTML = "";
+  const base = filterBy("period");
+  const cards = [...QUARTERS, "U"].map(q => {
+    const arr = q === "U" ? base.filter(e => !e._q) : base.filter(e => e._q === q);
+    const ic = countBy(arr, e => e.industry);
+    const inds = INDUSTRIES.filter(i => ic.get(i.key)).sort((a, b) => ic.get(b.key) - ic.get(a.key));
+    const top = [...arr].sort((a, b) => priority(a) - priority(b) || bySort(a, b)).slice(0, 4);
+    const sel = q !== "U" ? state.period === q : state.period === "noq";
+    const name = q === "U" ? "분기 미확정" : q;
+    const months = q === "U" ? "상·하반기 / 연중 / 미정" : `${Q_MONTHS[q][0]}월 · ${Q_MONTHS[q][1]}월 · ${Q_MONTHS[q][2]}월`;
+    return `<button class="qcard${sel ? " sel" : ""}${q === "U" ? " tbdc" : ""}" data-period-toggle="${q === "U" ? "noq" : q}">
+      <div class="qh"><span class="qn">${name}</span><span class="qm">${months}</span></div>
+      <div><div class="qt num">${arr.length}<small>개 이슈</small></div><div class="qs">기업 ${uniq(arr.map(e => e._co))}개 · 업종 ${inds.length}개${q !== "U" ? ` · 월 미정 ${arr.filter(e => !e._hasMonth).length}건` : ""}</div></div>
+      <div class="stackbar">${inds.map(i => `<i style="width:${ic.get(i.key) / arr.length * 100}%;background:${i.color}"></i>`).join("")}</div>
+      <div class="qinds">${inds.slice(0, 5).map(i => `<div class="qind"><i style="background:${i.color}"></i><span>${i.key}</span><b>${ic.get(i.key)}</b></div>`).join("") || `<div class="qind"><span style="color:var(--text-4)">해당 이슈 없음</span></div>`}
+        ${inds.length > 5 ? `<div class="qind"><i style="background:transparent"></i><span style="color:var(--text-4)">외 ${inds.length - 5}개 업종 · ${inds.slice(5).reduce((s, i) => s + ic.get(i.key), 0)}건</span></div>` : ""}</div>
+    </button>`;
+  }).join("");
+  // 선택 분기 상세 (월별 컬럼)
+  let detail = "";
+  const p = state.period;
+  if (p[0] === "Q") {
+    const arr = filtered;
+    detail = `<div class="qdetail"><div class="section-t">${p} 상세 이벤트 · ${arr.length}건</div><div class="month-cols">` +
+      Q_MONTHS[p].map(m => { const a = arr.filter(e => e._hasMonth && e.month === m).sort(bySort);
+        return `<div class="month-col"><h3>${m}월 <span>${a.length}건</span></h3><div class="stack">${a.map(e => evCard(e, { noDesc: true })).join("") || `<div class="tl-empty">해당 이슈 없음</div>`}</div></div>`; }).join("") + `</div>`;
+    const qo = arr.filter(e => !e._hasMonth);
+    if (qo.length) detail += `<div class="section-t">${p} · 월 미정</div><div class="evgrid">${qo.map(e => evCard(e)).join("")}</div>`;
+    detail += `</div>`;
+  } else if (p === "noq") {
+    detail = `<div class="qdetail"><div class="unsure-head"><b>분기 미확정 · ${filtered.length}건</b><span>원본에 분기·월이 적혀 있지 않은 이슈예요. 임의의 분기에 넣지 않고, 엑셀에 적힌 시기 표기별로 묶었어요.</span></div>${filtered.length ? unsureGroups(filtered) : emptyHTML()}</div>`;
+  } else {
+    detail = `<div class="qdetail"><div class="section-t">분기 카드(분기 미확정 포함)를 선택하면 상세 이벤트가 표시됩니다 · 전체 목록은 우측 상단 '전체 이슈 리스트 확인하기' 버튼</div></div>`;
+  }
+  $("mainBody").innerHTML = `<div class="card-b"><div class="qgrid">${cards}</div>${detail}</div>`;
+}
+
+/* =========================================================================
+   MAIN VIEW — 월별
+   ========================================================================= */
+function renderMonth() {
+  let m = state.period[0] === "m" ? +state.period.slice(1) : null;
+  const isU = state.period === "unsure";
+  $("mainTitle").textContent = "월별 View";
+  $("mainSub").textContent = "월 선택 → 해당 월 기업 이슈 상세 · 맨 오른쪽 '월 미확정' 탭에서 월이 정해지지 않은 이슈 확인";
+  $("mainLegend").innerHTML = "";
+  const base = filterBy("period");
+  const mc = countBy(base.filter(e => e._hasMonth), e => e.month);
+  const maxM = Math.max(1, ...mc.values());
+  const strip = `<div class="mstrip">` + Array.from({ length: 12 }, (_, i) => i + 1).map(k => {
+    const c = mc.get(k) || 0;
+    return `<button class="mbtn${m === k ? " sel" : ""}" data-period-set="m${k}" title="${k}월 ${c}건">
+      <span class="mb"><i style="height:${Math.max(2, c / maxM * 26)}px"></i></span><span class="mn">${k}월</span><span class="mc">${c}건</span></button>`;
+  }).join("") + (() => { const c = base.filter(e => !e._hasMonth).length;
+    return `<button class="mbtn tbdm${isU ? " sel" : ""}" data-period-set="unsure" title="월 미확정 ${c}건"><span class="mb"><i style="height:${Math.max(2, Math.min(26, c / maxM * 26))}px"></i></span><span class="mn">월 미확정</span><span class="mc">${c}건</span></button>`; })() + `</div>`;
+  if (isU) {
+    const arr = filtered, ic = countBy(arr, e => e.industry);
+    const inds = INDUSTRIES.filter(i => ic.get(i.key)).sort((a, b) => ic.get(b.key) - ic.get(a.key));
+    const maxI = Math.max(1, ...ic.values());
+    const side = `<div class="mside">
+      <div class="mhero"><div class="lbl">월 미확정</div><div class="big num">${arr.length}<small>개 이슈</small></div>
+        <div class="s">기업 ${uniq(arr.map(e => e._co))}개 · 업종 ${inds.length}개 · 원본에 월이 적혀 있지 않은 이슈</div></div>
+      <div class="side-box"><h4>업종별 이슈</h4><div class="hbars">${inds.map(i => `<div class="hbar" style="cursor:default"><span class="hl"><i style="background:${i.color}"></i>${i.key}</span><span class="ht"><i style="width:${ic.get(i.key) / maxI * 100}%;background:${i.color}"></i></span><span class="hv">${ic.get(i.key)}</span></div>`).join("") || `<div class="tl-empty">–</div>`}</div></div>
+    </div>`;
+    $("mainBody").innerHTML = `<div class="card-b">${strip}<div class="mlayout">${side}<div>${arr.length ? unsureGroups(arr) : emptyHTML()}</div></div></div>`;
+    return;
+  }
+  if (!m) {
+    $("mainBody").innerHTML = `<div class="card-b">${strip}<div class="empty-state"><b>월을 선택하세요</b>월을 선택하면 해당 월의 기업 이슈와 제안 검토 대상 광고주가 표시됩니다.</div></div>`;
+    return;
+  }
+  const arr = filtered.slice().sort((a, b) => priority(a) - priority(b) || bySort(a, b));
+  const ic = countBy(arr, e => e.industry);
+  const inds = INDUSTRIES.filter(i => ic.get(i.key)).sort((a, b) => ic.get(b.key) - ic.get(a.key));
+  const maxI = Math.max(1, ...ic.values());
+  const nm = (m % 12) + 1;
+  const next = m < 12 ? base.filter(e => e._hasMonth && e.month === nm).sort((a, b) => priority(a) - priority(b) || bySort(a, b)) : [];
+  const qOnly = base.filter(e => !e._hasMonth && e._q === `Q${Math.ceil(m / 3)}`);
+  const side = `<div class="mside">
+    <div class="mhero"><div class="lbl">2027년 ${m}월</div><div class="big num">${arr.length}<small>개 이슈</small></div>
+      <div class="s">기업 ${uniq(arr.map(e => e._co))}개 · 업종 ${inds.length}개${qOnly.length ? ` · 같은 분기 월 미정 ${qOnly.length}건 별도` : ""}</div></div>
+    <div class="side-box"><h4>업종별 이슈</h4><div class="hbars">${inds.map(i => `<div class="hbar" style="cursor:default"><span class="hl"><i style="background:${i.color}"></i>${i.key}</span><span class="ht"><i style="width:${ic.get(i.key) / maxI * 100}%;background:${i.color}"></i></span><span class="hv">${ic.get(i.key)}</span></div>`).join("") || `<div class="tl-empty">–</div>`}</div></div>
+  </div>`;
+  const body = arr.length ? `<div class="evgrid">${arr.map(e => evCard(e)).join("")}</div>` : emptyHTML();
+  $("mainBody").innerHTML = `<div class="card-b">${strip}<div class="mlayout">${side}<div><div class="section-t">${m}월 주요 기업 이슈</div>${body}</div></div></div>`;
+}
+
+/* =========================================================================
+   MAIN VIEW — 업종별
+   ========================================================================= */
+function renderIndustry() {
+  $("mainTitle").textContent = "업종별 View · 1~12월 Timeline";
+  $("mainSub").textContent = "업종 선택 → 해당 산업의 연간 마케팅 수요 타이밍";
+  $("mainLegend").innerHTML = "";
+  const base = filterBy("industry");
+  const ic = countBy(base, e => e.industry);
+  let focus = state.industries.size === 1 ? [...state.industries][0] : null;
+  if (!focus) focus = state.industryFocus && ic.get(state.industryFocus) ? state.industryFocus
+    : INDUSTRIES.map(i => i.key).sort((a, b) => (ic.get(b) || 0) - (ic.get(a) || 0))[0];
+  state.industryFocus = focus;
+  const list = `<div class="ilist">${INDUSTRIES.map(i => `<button class="ibtn${i.key === focus ? " sel" : ""}" data-ind-focus="${i.key}"><i style="background:${i.color}"></i><span>${i.key}</span><b class="num">${ic.get(i.key) || 0}</b></button>`).join("")}</div>`;
+  const arr = base.filter(e => e.industry === focus).sort(bySort);
+  const color = IND_COLOR[focus];
+  const mc = countBy(arr.filter(e => e._hasMonth), e => e.month);
+  const qc = countBy(arr, e => e._q);
+  const [tq, tqv] = topOf(qc, QUARTERS);
+  const [tm, tmv] = topOf(mc, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+  const tc = countBy(arr, e => e.issueType);
+  const [tt] = topOf(tc, ISSUE_TYPES);
+  const maxM = Math.max(1, ...mc.values());
+  const spark = `<div><div class="spark">${Array.from({ length: 12 }, (_, i) => `<i title="${i + 1}월 ${mc.get(i + 1) || 0}건" style="height:${(mc.get(i + 1) || 0) / maxM * 100}%;background:${(mc.get(i + 1) ? color : "#E5E7EB")}"></i>`).join("")}</div>
+    <div class="spark-l">${Array.from({ length: 12 }, (_, i) => `<span>${i + 1}</span>`).join("")}</div></div>`;
+  const head = `<div class="ihead"><div class="nm"><i style="background:${color}"></i>${focus}</div>
+    <div class="istat"><b class="num">${arr.length}</b>전체 이슈</div>
+    <div class="istat"><b class="num">${uniq(arr.map(e => e._co))}</b>기업</div>
+    <div class="istat"><b>${tq ? `${tq} (${tqv})` : "–"}</b>이슈 최다 분기</div>
+    <div class="istat"><b>${tm ? `${tm}월 (${tmv})` : "–"}</b>이슈 최다 월</div>
+    <div class="istat"><b style="font-size:14px;padding-top:4px">${tt ? esc(tt) : "–"}</b>주요 이슈 유형</div>
+    ${spark}</div>`;
+  let tl = `<div class="tl">`;
+  for (let m = 1; m <= 12; m++) {
+    const a = arr.filter(e => e._hasMonth && e.month === m);
+    tl += `<div class="tl-row${a.length ? "" : " empty"}" style="--ic:${color}"><div class="tl-m"><b>${m}월</b>${a.length ? `<span>${a.length}건</span>` : ""}</div>
+      <div class="tl-body">${a.length ? `<div class="tl-cards">${a.map(e => evCard(e, { noDesc: true })).join("")}</div>` : `<div class="tl-empty">–</div>`}</div></div>`;
+  }
+  const u = arr.filter(e => !e._hasMonth);
+  if (u.length) tl += `<div class="tl-row tbd" style="--ic:#9CA3AF"><div class="tl-m"><b style="font-size:13px">월 미확정</b><span>${u.length}건</span></div>
+      <div class="tl-body"><div class="tl-cards">${u.map(e => evCard(e, { noDesc: true })).join("")}</div></div></div>`;
+  tl += `</div>`;
+  $("mainBody").innerHTML = `<div class="card-b"><div class="ilayout">${list}<div>${arr.length ? head + tl : emptyHTML()}</div></div></div>`;
+}
+
+/* =========================================================================
+   HEATMAP — 업종 × 분기
+   ========================================================================= */
+function heatColor(v, max) {
+  if (!v) return ["#FAFBFC", "var(--text-4)"];
+  const i = Math.min(HEAT_RAMP.length - 1, Math.max(1, Math.round(v / max * (HEAT_RAMP.length - 1))));
+  return [HEAT_RAMP[i], i >= 4 ? "#fff" : "var(--text)"];
+}
+function renderHeatmap() {
+  const f = filtered, lanes = laneList();
+  const cols = [...QUARTERS, "U"];
+  const cell = (ind, q) => f.filter(e => e.industry === ind && (q === "U" ? !e._q : e._q === q)).length;
+  const M = lanes.map(L => cols.map(q => cell(L.key, q)));
+  const max = Math.max(1, ...M.flatMap(r => r.slice(0, 4)));
+  let h = `<table class="heat"><thead><tr><th class="rl"></th>${QUARTERS.map(q => `<th>${q}</th>`).join("")}<th title="분기가 확정되지 않은 이슈 (상·하반기/연중/미정)">미확정</th><th class="tot">합계</th></tr></thead><tbody>`;
+  lanes.forEach((L, r) => {
+    h += `<tr><th class="rl"><span><i style="background:${L.color}"></i>${L.key}</span></th>`;
+    cols.forEach((q, c) => {
+      const v = M[r][c];
+      const [bg, fg] = q === "U" ? [v ? "#F3F4F6" : "#FAFBFC", v ? "var(--text-2)" : "var(--text-4)"] : heatColor(v, max);
+      const sel = state.industries.size === 1 && state.industries.has(L.key) && (q === "U" ? state.period === "unsure" : state.period === q);
+      h += `<td class="${v ? "" : "z"}${q === "U" ? " tbdcol" : ""}${sel ? " sel" : ""}" style="background:${bg};color:${fg}" ${v ? `data-heat="${L.key}|${q}" data-tip="heat"` : ""}>${v || "·"}</td>`;
+    });
+    h += `<td class="tot num">${M[r].reduce((a, b) => a + b, 0)}</td></tr>`;
+  });
+  h += `<tr><th class="rl" style="color:var(--text-3)">합계</th>${cols.map((q, c) => `<td class="tot num">${M.reduce((s, r) => s + r[c], 0)}</td>`).join("")}<td class="tot num" style="color:var(--text);font-weight:800">${M.flat().reduce((a, b) => a + b, 0)}</td></tr>`;
+  h += `</tbody></table>`;
+  $("heatBody").innerHTML = f.length ? h : emptyHTML();
+  $("heatScale").innerHTML = `적음 ${HEAT_RAMP.slice(1).map(c => `<i style="background:${c}"></i>`).join("")} 많음`;
+}
+
+/* =========================================================================
+   MONTH VOLUME — 업종별 누적 Column
+   ========================================================================= */
+function niceMax(v) { return Math.max(4, Math.ceil(v / 4) * 4); }
+function renderMonthChart() {
+  const f = filtered.filter(e => e._hasMonth);
+  const byM = Array.from({ length: 12 }, (_, i) => f.filter(e => e.month === i + 1));
+  const max = niceMax(Math.max(1, ...byM.map(a => a.length)));
+  const ticks = [max, max * 3 / 4, max / 2, max / 4, 0];
+  const sel = periodCols();
+  let h = `<div class="colchart"><div class="yaxis">${ticks.map(t => `<span>${Number.isInteger(t) ? t : ""}</span>`).join("")}</div><div class="cols">`;
+  [0.25, 0.5, 0.75, 1].forEach(p => h += `<div class="gl" style="bottom:${p * 100}%"></div>`);
+  byM.forEach((arr, i) => {
+    const ic = countBy(arr, e => e.industry);
+    const segs = INDUSTRIES.filter(x => ic.get(x.key));
+    const isSel = state.period === `m${i + 1}` || (sel && sel.includes(i + 1) && state.period[0] !== "m" && state.period !== "all");
+    const hpx = arr.length / max * 100;
+    h += `<div class="col${isSel ? " sel" : ""}" data-period-set="m${i + 1}" data-tip="month" data-m="${i + 1}">
+      ${arr.length ? `<span class="val" style="bottom:calc(${hpx}% + 3px)">${arr.length}</span>` : ""}
+      <div class="bar" style="height:${hpx}%">${segs.map(s => `<i style="flex:${ic.get(s.key)} 1 0;background:${s.color}"></i>`).join("")}</div></div>`;
+  });
+  h += `</div></div><div class="xlabels">${Array.from({ length: 12 }, (_, i) => `<span>${i + 1}월</span>`).join("")}</div>`;
+  const unsure = filtered.filter(e => !e._hasMonth);
+  const ub = countBy(unsure, e => e._q ? `${e._q} (월 미정)` : e._half ? `${halfLabel(e._half)} (월 미정)` : e.periodType === "pre" ? "2026년 선행" : e.periodType === "season" ? "시즌" : e.periodType === "tbd" ? "일정 미정" : e.periodType === "recurring" ? "정례 행사" : "연중");
+  h += `<div class="chart-note"><span>월 확정 <b class="num">${f.length}</b>건</span><span>월 미확정 <b class="num">${unsure.length}</b>건 (차트 제외)${unsure.length ? " — " + [...ub].map(([k, v]) => `${k} ${v}`).join(" · ") : ""}</span></div>`;
+  const present = INDUSTRIES.filter(i => f.some(e => e.industry === i.key));
+  h += `<div class="legend" style="margin-top:10px">${present.map(i => `<span><i style="background:${i.color}"></i>${i.key}</span>`).join("")}</div>`;
+  $("monthChart").innerHTML = f.length ? h : emptyHTML("월이 확정된 이슈가 없습니다.");
+  monthGroups = byM;
+}
+let monthGroups = [];
+
+/* =========================================================================
+   INDUSTRY & TYPE BARS
+   ========================================================================= */
+function hbarList(rows, max, attr) {
+  return `<div class="hbars">${rows.map(r => `<div class="hbar" ${attr}="${esc(r.key)}" style="grid-template-columns:${attr === "data-type-toggle" ? "150px" : "96px"} minmax(0,1fr) 30px">
+    <span class="hl">${r.color ? `<i style="background:${r.color}"></i>` : ""}${esc(r.key)}</span>
+    <span class="ht" style="height:14px"><i style="width:${r.v / max * 100}%;background:${r.color || "#4A6D99"}"></i></span>
+    <span class="hv">${r.v}</span></div>`).join("")}</div>`;
+}
+function renderIndChart() {
+  const ic = countBy(filtered, e => e.industry);
+  const rows = INDUSTRIES.map(i => ({ key: i.key, color: i.color, v: ic.get(i.key) || 0 })).filter(r => r.v).sort((a, b) => b.v - a.v);
+  $("indChart").innerHTML = rows.length ? hbarList(rows, Math.max(...rows.map(r => r.v)), "data-ind-toggle") : emptyHTML();
+}
+function renderTypeChart() {
+  const tc = countBy(filtered, e => e.issueType);
+  const rows = ISSUE_TYPES.map(t => ({ key: t, v: tc.get(t) || 0 })).filter(r => r.v).sort((a, b) => b.v - a.v);
+  $("typeChart").innerHTML = rows.length ? hbarList(rows, Math.max(...rows.map(r => r.v)), "data-type-toggle") : emptyHTML();
+}
+
+/* =========================================================================
+   TABLE
+   ========================================================================= */
+const COLS = [
+  { key: "when", sortLabel: "시기순", label: "시기", sort: (a, b) => bySort(a, b) },
+  { key: "q", sortLabel: "분기순", label: "분기", sort: (a, b) => (a._q || "Z").localeCompare(b._q || "Z") || bySort(a, b) },
+  { key: "ind", sortLabel: "업종별", label: "업종", sort: (a, b) => IND_ORDER[a.industry] - IND_ORDER[b.industry] || bySort(a, b) },
+  { key: "co", sortLabel: "기업·행사명순", label: "기업 / 행사명", sort: (a, b) => a._main.localeCompare(b._main, "ko") || bySort(a, b) },
+  { key: "ti", sortLabel: "이슈명순", label: "주요 이슈 / 주관", sort: (a, b) => a._sub.localeCompare(b._sub, "ko") },
+  { key: "type", sortLabel: "이슈 유형별", label: "이슈 유형", sort: (a, b) => TYPE_ORDER[a.issueType] - TYPE_ORDER[b.issueType] || bySort(a, b) },
+  { key: "ag", sortLabel: "대행사별", label: "대행사", sort: (a, b) => (a.agency || "힣").localeCompare(b.agency || "힣", "ko") || bySort(a, b) },
+  { key: "opp", label: "영업 / 홍보 포인트", sort: null },
+];
+function renderTable() {
+  const c = COLS.find(x => x.key === state.sort.key);
+  const rows = events.slice().sort(   // 전체 리스트는 필터와 무관하게 항상 전체 이슈 고정
+    (a, b) => c.sort(a, b) * state.sort.dir);
+  const shown = rows;
+  let h = `<thead><tr>${COLS.map(x => `<th class="${x.sort ? "s" : ""}${state.sort.key === x.key ? " on" : ""}" ${x.sort ? `data-sort="${x.key}" title="눌러서 ${x.label} 기준으로 정렬"` : ""}>${x.label}${x.sort ? `<span class="ar">${state.sort.key === x.key ? (state.sort.dir > 0 ? "▲" : "▼") : "↕"}</span>` : ""}</th>`).join("")}</tr></thead><tbody>`;
+  h += shown.map(e => `<tr class="row" data-id="${e.id}">
+    <td class="c-when${e._hasMonth ? "" : " u"}">${esc(e._short)}</td>
+    <td class="q">${e._q || `<span style="color:var(--text-4)">${e._half ? halfLabel(e._half) : "–"}</span>`}</td>
+    <td>${indTag(e.industry)}</td>
+    <td class="c-co">${esc(e._main)}</td>
+    <td class="c-ti"><div class="clamp">${esc(e._sub)}${e._extra ? `<span style="color:var(--text-3)"> — ${esc(e._extra)}</span>` : ""}</div></td>
+    <td style="white-space:nowrap">${esc(e.issueType)}</td>
+    <td style="white-space:nowrap;color:${e.agency ? "var(--text-2)" : "var(--text-4)"}">${esc(e.agency || "–")}</td>
+    <td class="c-opp"><div class="clamp">${esc(e.opportunity || firstLine(e.linkPoint) || firstLine(e.description) || "–")}</div></td></tr>`).join("");
+  h += `</tbody>`;
+  $("tbl").innerHTML = rows.length ? h : `<tbody><tr><td colspan="${COLS.length}">${emptyHTML()}</td></tr></tbody>`;
+  $("tableCount").innerHTML = `<b class="num">${rows.length}</b>건`;
+  $("listBtnCount").textContent = rows.length;
+  const cur = COLS.find(x => x.key === state.sort.key);
+  $("sortBar").innerHTML = `<span class="sl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M13 16l4 4 4-4"/></svg>정렬 기준 선택</span>` +
+    COLS.filter(x => x.sort).map(x => { const on = state.sort.key === x.key;
+      return `<button class="sortbtn${on ? " on" : ""}" data-sort="${x.key}">${x.sortLabel}<span class="dir">${on ? (state.sort.dir > 0 ? "▲ 오름차순" : "▼ 내림차순") : "↕"}</span></button>`; }).join("") +
+    `<span class="sh">같은 버튼을 한 번 더 누르면 순서가 뒤집혀요 · 표의 열 제목을 눌러도 정렬됩니다</span>`;
+  $("tblFoot").innerHTML = `<span>총 <b class="num" style="color:var(--text)">${rows.length}</b>건 · 현재 정렬: <b style="color:var(--text)">${cur.sortLabel}</b> (${state.sort.dir > 0 ? "오름차순" : "내림차순"})</span><span>ESC 또는 바깥 영역 클릭으로 닫기</span>`;
+}
+
+/* =========================================================================
+   DETAIL PANEL
+   ========================================================================= */
+const bullets = s => {
+  const lines = String(s).split("\n").map(x => x.trim()).filter(Boolean);
+  if (lines.length > 1 || /^•/.test(lines[0] || "")) return `<ul>${lines.map(l => `<li>${esc(l.replace(/^•\s*/, ""))}</li>`).join("")}</ul>`;
+  return esc(lines[0] || "");
+};
+let panelStack = [];
+function openDetail(id, push = true) {
+  const e = BY_ID.get(+id); if (!e) return;
+  if (push) panelStack.push({ type: "ev", id: e.id });
+  const back = panelStack.length > 1 ? `<button class="p-back" data-action="back">← 목록으로</button>` : "";
+  const qLabel = e._q ? `${e._q} (${Q_MONTHS[e._q][0]}~${Q_MONTHS[e._q][2]}월)` : e._half ? `${halfLabel(e._half)} · 분기 미정` : "미정";
+  $("pHead").innerHTML = `${back}<button class="p-close" data-action="close" aria-label="닫기">✕</button>
+    <div class="p-tags">${indTag(e.industry)}<span style="color:var(--border-2)">|</span><span style="font-size:12px;color:var(--text-3);font-weight:600">${esc(e.issueType)}</span></div>
+    <div class="p-co">${esc(e._main)}</div><div class="p-title">${esc(e._sub)}</div>
+    <div class="p-when"><div><small>일정</small><b>${esc(e._short)}</b></div><div><small>분기</small><b>${qLabel}</b></div>${e._bucket ? `<div><small>시기 구분</small><b>${esc(e._bucket)}</b></div>` : ""}</div>`;
+  const O = [["LUUX 제안 포인트", e.opportunity], ["LUUX 연계 포인트", e.linkPoint], ["과거 캠페인", e.pastCampaign]].filter(x => x[1]);
+  let b = "";
+  // 대행사 — 별도 강조 박스
+  if (e.agency) {
+    const types = e.agencyTypes || [];
+    b += `<div class="ag-box"><div class="ag-l">담당 대행사</div><div class="ag-n">${esc(e.agency)}</div>
+      ${types.length ? `<div class="ag-t">${types.map(x => `<span>${esc(x)}</span>`).join("")}</div>` : `<div class="ag-none">대행 유형 미기재</div>`}</div>`;
+  } else {
+    b += `<div class="ag-box empty"><div class="ag-l">담당 대행사</div><div class="ag-n">확인된 대행사 없음</div></div>`;
+  }
+  if (O.length) {
+    b += `<div class="opp-box"><div class="oh">💡 SALES OPPORTUNITY</div>${O.map(([l, v]) => `<div class="og"><div class="ol">${l}</div><div class="ov">${bullets(v)}</div></div>`).join("")}</div>`;
+  }
+  // 상세 정보 — 기업명 · 일정 · 주요 이슈명 · 특징만
+  const feat = e.description ? bullets(e.description) : esc(e._extra || (e.sourceNote && e.sourceNote !== e.title ? e.sourceNote : ""));
+  const F = [
+    e.scope === "행사" ? ["행사명", `${esc(e._main)} <span style="color:var(--text-3)">(주관: ${esc(e.company)})</span>`, true] : ["기업명", e.company],
+    ["일정", e.periodRaw],
+    ["주요 이슈명", e.title],
+    ["특징", feat, true],
+  ].filter(x => x[1]);
+  b += `<div class="p-sec">상세 정보</div><dl class="fields">${F.map(([l, v, raw]) => `<dt>${l}</dt><dd>${raw ? v : esc(v)}</dd>`).join("")}</dl>`;
+  if (e.note || e.memo) b += `<div class="p-sec">참고사항</div>${e.memo ? `<div class="note" style="margin-bottom:6px">리스트업 메모: ${esc(e.memo)}</div>` : ""}${e.note ? `<div class="note" style="white-space:pre-line">${esc(e.note)}</div>` : ""}`;
+  const S = (e.sources || []);
+  const D = [
+    ["기사 링크", S.length ? `<ul>${S.map(s => `<li>${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label || "링크")}</a>` : esc(s.label)}</li>`).join("")}</ul>` : ""],
+  ].filter(x => x[1]);
+  if (D.length) b += `<div class="p-sec">출처</div><dl class="fields">${D.map(([l, v]) => `<dt>${l}</dt><dd>${v}</dd>`).join("")}</dl>`;
+  const rel = events.filter(x => x.company === e.company && x.id !== e.id).sort(bySort);
+  if (rel.length) b += `<div class="p-sec">${e.scope === "행사" ? "같은 주관사의 다른 이슈" : "같은 기업의 다른 이슈"} · ${rel.length}</div><div class="related">${rel.map(x => `<button class="mini" data-id="${x.id}"><i style="background:${x._ic}"></i><b>${esc(x._short)}</b><span>${esc(x.scope === "행사" ? x._main : x.title)}</span></button>`).join("")}</div>`;
+  $("pBody").innerHTML = b; $("pBody").scrollTop = 0;
+  showPanel();
+}
+function openList(title, arr, push = true) {
+  if (push) panelStack = [{ type: "list", title, ids: arr.map(e => e.id) }];
+  $("pHead").innerHTML = `<button class="p-close" data-action="close" aria-label="닫기">✕</button><div class="p-co">${esc(title)}</div><div class="p-title">${arr.length}개 이슈</div>`;
+  $("pBody").innerHTML = `<div class="stack">${arr.map(e => evCard(e)).join("")}</div>`;
+  $("pBody").scrollTop = 0;
+  showPanel();
+}
+function showPanel() { hideTip(); $("panel").classList.add("on"); $("overlay").classList.add("on"); $("panel").setAttribute("aria-hidden", "false"); }
+function closePanel() { $("panel").classList.remove("on"); $("overlay").classList.remove("on"); $("panel").setAttribute("aria-hidden", "true"); panelStack = []; }
+
+/* =========================================================================
+   TOOLTIP
+   ========================================================================= */
+const tip = $("tip");
+function showTip(target, x, y) {
+  const k = target.dataset.tip; let h = "";
+  if (k === "ev") { const e = BY_ID.get(+target.dataset.id); h = `<div class="tt">${esc(e._main)} · ${esc(e._short)}</div>${esc(e._sub)}<div style="color:#9CA3AF;margin-top:3px">${esc(e.issueType)}${e.periodRaw ? ` · 원문: ${esc(e.periodRaw)}` : ""}</div>`; }
+  if (k === "month") { const m = +target.dataset.m, arr = monthGroups[m - 1] || []; const ic = countBy(arr, e => e.industry);
+    h = `<div class="tt">${m}월 · ${arr.length}건</div>` + INDUSTRIES.filter(i => ic.get(i.key)).map(i => `<div class="tr"><span><i style="background:${i.color}"></i>${i.key}</span><b>${ic.get(i.key)}</b></div>`).join(""); }
+  if (k === "heat") { const [ind, q] = target.dataset.heat.split("|"); const arr = filtered.filter(e => e.industry === ind && (q === "U" ? !e._q : e._q === q));
+    h = `<div class="tt">${ind} × ${q === "U" ? "분기 미확정" : q} · ${arr.length}건</div>` + arr.slice(0, 5).map(e => `<div>· ${esc(e._main)} <span style="color:#9CA3AF">${esc(e._short)}</span></div>`).join("") + (arr.length > 5 ? `<div style="color:#9CA3AF">외 ${arr.length - 5}건</div>` : ""); }
+  if (!h) return hideTip();
+  tip.innerHTML = h; tip.classList.add("on");
+  const r = tip.getBoundingClientRect();
+  let lx = x + 14, ly = y + 14;
+  if (lx + r.width > innerWidth - 8) lx = x - r.width - 14;
+  if (ly + r.height > innerHeight - 8) ly = y - r.height - 14;
+  tip.style.left = lx + "px"; tip.style.top = ly + "px";
+}
+function hideTip() { tip.classList.remove("on"); }
+document.addEventListener("mousemove", ev => { const t = $("panel").classList.contains("on") ? null : ev.target.closest("[data-tip]"); t ? showTip(t, ev.clientX, ev.clientY) : hideTip(); }, { passive: true });
+
+/* =========================================================================
+   RENDER PIPELINE
+   ========================================================================= */
+const VIEWS = { annual: renderAnnual, quarter: renderQuarter, month: renderMonth, industry: renderIndustry };
+function render() {
+  filtered = events.filter(e => matches(e));
+  renderFilterChips(); renderActive();
+  VIEWS[state.view]();
+  renderTable();
+}
+let raf = 0;
+const schedule = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(render); };
+const toggleSet = (set, v) => set.has(v) ? set.delete(v) : set.add(v);
+
+/* =========================================================================
+   EVENTS (delegation)
+   ========================================================================= */
+document.addEventListener("click", ev => {
+  const t = ev.target.closest("button, [data-period-set], [data-ind-toggle], [data-type-toggle], [data-heat], [data-sort], tr.row, #overlay");
+  if (!t) return;
+  const d = t.dataset;
+  if (t.id === "overlay") return closePanel();
+  if (d.action === "close") return closePanel();
+  if (d.action === "back") { panelStack.pop(); const top = panelStack[panelStack.length - 1]; if (top?.type === "list") openList(top.title, top.ids.map(i => BY_ID.get(i)), false); else closePanel(); return; }
+  if (d.action === "reset") return resetAll();
+  if (d.action === "open-list") return toggleList(true);
+  if (d.action === "close-list") return toggleList(false);
+  if (d.view) { state.view = d.view; document.querySelectorAll("#viewSeg button").forEach(b => b.classList.toggle("on", b === t));
+    if (d.view === "month" && state.period[0] !== "m" && state.period !== "unsure") { state.prevPeriod = state.period; state.period = "m1"; }
+    else if (d.view !== "month" && state.prevPeriod !== undefined) { state.period = state.prevPeriod; state.prevPeriod = undefined; }
+    return schedule(); }
+  if (d.cell) { const arr = cellGroups.get(d.cell) || []; const [ind, m] = d.cell.split("|"); return openList(`${m === "u" ? "월 미확정" : m + "월"} · ${ind}`, arr); }
+  if (d.id) { if (!$("panel").classList.contains("on")) panelStack = []; return openDetail(d.id); }
+  if (d.scope) { state.scope = d.scope; state.tableLimit = 60; return schedule(); }
+  if (d.period !== undefined) { state.period = d.period; state.tableLimit = 60; return schedule(); }
+  if (d.periodSet) { state.period = state.period === d.periodSet && state.view !== "month" ? "all" : d.periodSet; state.tableLimit = 60; return schedule(); }
+  if (d.periodToggle) { state.period = state.period === d.periodToggle ? "all" : d.periodToggle; state.tableLimit = 60; return schedule(); }
+  if (d.ind !== undefined) { d.ind ? toggleSet(state.industries, d.ind) : state.industries.clear(); return schedule(); }
+  if (d.indToggle) { toggleSet(state.industries, d.indToggle); return schedule(); }
+  if (d.indFocus) { state.industries.clear(); state.industries.add(d.indFocus); state.industryFocus = d.indFocus; return schedule(); }
+  if (d.type !== undefined) { d.type ? toggleSet(state.types, d.type) : state.types.clear(); return schedule(); }
+  if (d.typeToggle) { toggleSet(state.types, d.typeToggle); return schedule(); }
+  if (d.heat) { const [ind, q] = d.heat.split("|"); const p = q === "U" ? "unsure" : q;
+    const same = state.period === p && state.industries.size === 1 && state.industries.has(ind);
+    if (same) { state.period = "all"; state.industries.clear(); } else { state.period = p; state.industries = new Set([ind]); }
+    return schedule(); }
+  if (d.sort) { state.sort = { key: d.sort, dir: state.sort.key === d.sort ? -state.sort.dir : 1 }; return renderTable(); }
+  if (d.untoken) {
+    const v = d.val;
+    if (d.untoken === "scope") state.scope = "all";
+    if (d.untoken === "period") state.period = "all";
+    if (d.untoken === "ind") state.industries.delete(v);
+    if (d.untoken === "type") state.types.delete(v);
+    if (d.untoken === "q") { state.q = ""; $("search").value = ""; $("searchBox").classList.remove("has"); }
+    return schedule();
+  }
+});
+function resetAll() {
+  state.period = state.view === "month" ? "m1" : "all";
+  state.scope = "all"; state.industries.clear(); state.types.clear(); state.q = ""; state.tableLimit = 60;
+  $("search").value = ""; $("searchBox").classList.remove("has");
+  schedule();
+}
+$("resetBtn").addEventListener("click", resetAll);
+let st = 0;
+$("search").addEventListener("input", ev => {
+  $("searchBox").classList.toggle("has", !!ev.target.value);
+  clearTimeout(st); st = setTimeout(() => { state.q = ev.target.value.trim().toLowerCase(); state.tableLimit = 60; schedule(); }, 120);
+});
+$("searchClear").addEventListener("click", () => { $("search").value = ""; $("searchBox").classList.remove("has"); state.q = ""; schedule(); });
+function toggleList(on) {
+  $("listModal").classList.toggle("on", on); $("modalBg").classList.toggle("on", on);
+  $("listModal").setAttribute("aria-hidden", on ? "false" : "true");
+}
+$("modalBg").addEventListener("click", () => toggleList(false));
+document.addEventListener("keydown", ev => {
+  if (ev.key !== "Escape") return;
+  if ($("panel").classList.contains("on")) closePanel(); else toggleList(false);
+});
+
+render();
+</script>
+</body>
+</html>
